@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "392468411342",
+    "project_id": "fir-honours-app",
+    "storage_bucket": "fir-honours-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:392468411342:android:9e47f209c21ace9fd9b19f",
+        "android_client_info": {
+          "package_name": "com.find.doctor.db.testHonours"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "392468411342-g1nuf7pv1qnnhuvmp70s348v93rm6d9e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkR1r144GdHQbj43cG89GBEUhPpG0GsIo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "392468411342-g1nuf7pv1qnnhuvmp70s348v93rm6d9e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "392468411342-rojau12htq5gcub1v27q2nhvrjkdnjtm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.find.doctor.db.testHonours"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
