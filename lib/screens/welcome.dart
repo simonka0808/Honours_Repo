@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:test_honours/db/auth_controller.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:test_honours/widgets/DoctorsScreen.dart';
+import 'package:test_honours/widgets/doctors_screen.dart';
 
 class WelcomePage extends StatelessWidget {
   String email;
@@ -28,19 +28,19 @@ class WelcomePage extends StatelessWidget {
     double h = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.lightBlueAccent,
+      backgroundColor: Colors.lightBlueAccent.shade100,
       body: SafeArea(
         child: Column(
           children: [
             //app bar
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(12.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: 15,
+                        horizontal: 10,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,19 +58,19 @@ class WelcomePage extends StatelessWidget {
                               )
                             ],
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: 10),
                           Text(
                             "Hi" + " " + email,
                             style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
+                                color: Colors.black45,
+                                fontSize: 25,
                                 fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 10),
                           Text(
-                            "Have a look\nChoose the best for you!",
+                            "Choose the best for you!",
                             style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600),
                           ),
@@ -112,7 +112,7 @@ class WelcomePage extends StatelessWidget {
                             color: Colors.black),
                       ),
                     ),
-                    SizedBox(height: 15),
+                    SizedBox(height: 10),
                     Container(
                       height: 100,
                       child: ListView.builder(
@@ -145,7 +145,7 @@ class WelcomePage extends StatelessWidget {
                                     child: categoriesIcons[index],
                                   ),
                                 ),
-                                SizedBox(height: 1),
+                                SizedBox(height: 5),
                                 Text(categories[index],
                                     style: TextStyle(
                                         fontSize: 16,
@@ -155,17 +155,18 @@ class WelcomePage extends StatelessWidget {
                             );
                           }),
                     ),
-                    SizedBox(height: 30),
+                    SizedBox(height: 15),
                     Padding(
                       padding: EdgeInsets.only(left: 15),
                       child: Text(
-                        "Recommended Doctors",
+                        "Our Doctors",
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.black87.withOpacity(0.7)),
                       ),
                     ),
+                    SizedBox(height: 10),
                     DoctorsScreen(),
                   ]),
             ),

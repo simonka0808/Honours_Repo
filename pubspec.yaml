@@ -36,9 +36,9 @@ flutter:
     - img/login_avatar.png
     - img/sign_in.jpg
     - img/doctors/doc1.jpg
-#    - img/doctors/doc2.jpg
-#    - img/doctors/doc3.jpg
-#    - img/doctors/doc4.jpg
+    - img/doctors/doc2.jpg
+    - img/doctors/doc3.jpg
+    - img/doctors/doc4.jpg
 
 #
 #  fonts:              # Required if your app uses custom fonts
