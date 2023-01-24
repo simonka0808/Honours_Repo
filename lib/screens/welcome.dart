@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:test_honours/db/auth_controller.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:test_honours/widgets/doctors_screen.dart';
 

@@ -1,137 +1,53 @@
-import 'dart:core';
-import 'dart:math';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'dart:convert' as convert;
-
-import 'package:http/http.dart' as http;
-
-class GoogleSheetData extends StatefulWidget {
-  const GoogleSheetData({super.key});
-
-  @override
-  LoadDataFromGoogleSheetState createState() => LoadDataFromGoogleSheetState();
-}
-
-class LoadDataFromGoogleSheetState extends State<GoogleSheetData> {
-  MeetingDataSource? events;
-  final List<Color> _colorCollection = <Color>[];
-
-  @override
-  void initState() {
-    _initializeEventColor();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          body: SafeArea(
-              child: Container(
-        child: FutureBuilder(
-          future: getDataFromGoogleSheet(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.data != null) {
-              return SafeArea(
-                  child: Container(
-                child: SfCalendar(
-                  view: CalendarView.month,
-                  monthViewSettings: const MonthViewSettings(showAgenda: true),
-                  dataSource: MeetingDataSource(snapshot.data),
-                  initialDisplayDate: snapshot.data[0].from,
-                ),
-              ));
-            } else {
-              return Container(
-                child: const Center(
-                  child: Text('Loading.....'),
-                ),
-              );
-            }
-          },
-        ),
-      ))),
-    );
-  }
-
-  void _initializeEventColor() {
-    _colorCollection.add(const Color(0xFF0F8644));
-    _colorCollection.add(const Color(0xFF8B1FA9));
-    _colorCollection.add(const Color(0xFFD20100));
-    _colorCollection.add(const Color(0xFFFC571D));
-    _colorCollection.add(const Color(0xFF36B37B));
-    _colorCollection.add(const Color(0xFF01A1EF));
-    _colorCollection.add(const Color(0xFF3D4FB5));
-    _colorCollection.add(const Color(0xFFE47C73));
-    _colorCollection.add(const Color(0xFF636363));
-    _colorCollection.add(const Color(0xFF0A8043));
-  }
-
-  Future<List<Meeting>> getDataFromGoogleSheet() async {
-    Response data = await http.get(
-      Uri.parse(
-          "https://script.google.com/macros/s/AKfycbz9ve2Ng7xRrBAu9-TqW4uzv4nettPFahTTC9t6hbo7O6gZjuSes2uPGOXx9Jzmj214/exec"),
-    );
-    dynamic jsonAppData = convert.jsonDecode(data.body);
-    final List<Meeting> appointmentData = [];
-    final Random random = Random();
-    for (dynamic data in jsonAppData) {
-      Meeting meetingData = Meeting(
-        eventName: data['subject'],
-        from: _convertDateFromString(data['starttime']),
-        to: _convertDateFromString(data['endtime']),
-        background: _colorCollection[random.nextInt(9)],
-      );
-      appointmentData.add(meetingData);
-    }
-    return appointmentData;
-  }
-
-  DateTime _convertDateFromString(String date) {
-    return DateTime.parse(date);
-  }
-}
-
-class MeetingDataSource extends CalendarDataSource {
-  MeetingDataSource(List<Meeting> source) {
-    appointments = source;
-  }
-
-  @override
-  DateTime getStartTime(int index) {
-    return appointments![index].from;
-  }
-
-  @override
-  DateTime getEndTime(int index) {
-    return appointments![index].to;
-  }
-
-  @override
-  String getSubject(int index) {
-    return appointments![index].eventName;
-  }
-
-  @override
-  Color getColor(int index) {
-    return appointments![index].background;
-  }
-}
-
-class Meeting {
-  Meeting(
-      {this.eventName = '',
-      required this.from,
-      required this.to,
-      this.background,
-      this.isAllDay = false});
-
-  String? eventName;
-  DateTime? from;
-  DateTime? to;
-  Color? background;
-  bool? isAllDay;
-}
+// import 'dart:core';
+// import 'dart:math';
+// import 'package:flutter/material.dart';
+// import 'package:http/http.dart';
+// import 'package:test_honours/model/doctors.dart';
+// import 'package:syncfusion_flutter_calendar/calendar.dart';
+// import 'dart:convert' as convert;
+//
+// import 'package:http/http.dart' as http;
+//
+// import '../model/doctors.dart';
+//
+// class GoogleSheetData extends StatelessWidget {
+//   final Doctor doctor;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Material(
+//       color: Colors.white,
+//       child: SfCalendar(
+//         view: CalendarView.workWeek,
+//         specialRegions: lunchTime(),
+//         timeSlotViewSettings: TimeSlotViewSettings(
+//             timeTextStyle: TextStyle(
+//               fontWeight: FontWeight.w500,
+//               fontStyle: FontStyle.italic,
+//               fontSize: 15,
+//               color: Colors.blue,
+//             ),
+//             startHour: doctor.startHour,
+//             endHour: doctor.endHour,
+//             numberOfDaysInView: 4,
+//             timeIntervalHeight: 50,
+//             timeIntervalWidth: 50,
+//             nonWorkingDays: <int>[DateTime.friday, DateTime.saturday]),
+//       ),
+//     );
+//   }
+// }
+//
+// List<TimeRegion> lunchTime() {
+//   final List<TimeRegion> lunchTimeSession = <TimeRegion>[];
+//   lunchTimeSession.add(TimeRegion(
+//       startTime: DateTime(2023, 1, 24, 13, 0, 0),
+//       endTime: DateTime(2023, 1, 24, 14, 0, 0),
+//       recurrenceRule: 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MON,TUE,WED,THU,FRI',
+//       text: "Break",
+//       color: Colors.amber,
+//       enablePointerInteraction: true,
+//       textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)));
+//
+//   return lunchTimeSession;
+// }

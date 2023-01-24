@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../model/doctors.dart';
 import 'booking_calendar.dart';
@@ -81,7 +82,7 @@ class AppointmentScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Patients",
+                        "Patients" + doctorInfo.startHour.toString(),
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -109,7 +110,7 @@ class AppointmentScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        "4.9",
+                        doctorInfo.star,
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w400,
@@ -179,23 +180,43 @@ class AppointmentScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 30),
-                  GestureDetector(
-                    // When the child is tapped, show a snackbar.
-                    onTap: () {
-                      Navigator.of(context).push(new MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              new GoogleSheetData())); //your login class name
-                    },
-                    // The custom button
-                    child: Container(
-                      padding: const EdgeInsets.all(12.0),
-                      decoration: BoxDecoration(
-                        color: Colors.lightBlue,
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: const Text('Book an Appointment'),
-                    ),
+                  SfCalendar(
+                    view: CalendarView.workWeek,
+                    specialRegions: lunchTime(),
+                    timeSlotViewSettings: TimeSlotViewSettings(
+                        timeTextStyle: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontStyle: FontStyle.italic,
+                          fontSize: 15,
+                          color: Colors.blue,
+                        ),
+                        startHour: doctorInfo.startHour,
+                        endHour: doctorInfo.endHour,
+                        numberOfDaysInView: 4,
+                        timeIntervalHeight: 50,
+                        timeIntervalWidth: 50,
+                        nonWorkingDays: <int>[
+                          DateTime.friday,
+                          DateTime.saturday
+                        ]),
                   ),
+                  // GestureDetector(
+                  //   // When the child is tapped, show a snackbar.
+                  //   onTap: () {
+                  //     Navigator.of(context).push(new MaterialPageRoute(
+                  //         builder: (BuildContext context) =>
+                  //             new GoogleSheetData())); //your login class name
+                  //   },
+                  //   // The custom button
+                  //   child: Container(
+                  //     padding: const EdgeInsets.all(12.0),
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.lightBlue,
+                  //       borderRadius: BorderRadius.circular(8.0),
+                  //     ),
+                  //     child: const Text('Book an Appointment'),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -204,4 +225,18 @@ class AppointmentScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+List<TimeRegion> lunchTime() {
+  final List<TimeRegion> lunchTimeSession = <TimeRegion>[];
+  lunchTimeSession.add(TimeRegion(
+      startTime: DateTime(2023, 1, 24, 13, 0, 0),
+      endTime: DateTime(2023, 1, 24, 14, 0, 0),
+      recurrenceRule: 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MON,TUE,WED,THU,FRI',
+      text: "Break",
+      color: Colors.amber,
+      enablePointerInteraction: true,
+      textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)));
+
+  return lunchTimeSession;
 }
