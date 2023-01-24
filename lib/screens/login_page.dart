@@ -183,28 +183,6 @@ class LoginPage extends StatelessWidget {
                     ),
                   )),
             ),
-            // RichText(
-            //     text: TextSpan(
-            //         recognizer: TapGestureRecognizer()
-            //           ..onTap = () {
-            //             onTap:
-            //             () {
-            //               Navigator.of(context).push(new MaterialPageRoute(
-            //                   builder: (BuildContext context) =>
-            //                       new SignUpPage())); //your login class name
-            //             };
-            //           },
-            //         text: "Don`t have an account?",
-            //         style: TextStyle(color: Colors.grey[500], fontSize: 18),
-            //         children: const [
-            //       TextSpan(
-            //         text: "Create",
-            //         style: TextStyle(
-            //             color: Colors.black,
-            //             fontSize: 18,
-            //             fontWeight: FontWeight.bold),
-            //       )
-            //     ])),
           ],
         ));
   }

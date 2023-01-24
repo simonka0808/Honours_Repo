@@ -18,6 +18,8 @@ dependencies:
   firebase_core:
   google_sign_in:
   get:
+  syncfusion_flutter_calendar: 20.3.56
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

@@ -41,7 +41,8 @@ class DoctorsScreen extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => AppointmentScreen()),
+                                    builder: (context) =>
+                                        AppointmentScreen(doctor)),
                               );
                             },
                             child: ClipRRect(
@@ -121,7 +122,7 @@ class DoctorsScreen extends StatelessWidget {
                                     color: Colors.black87.withOpacity(0.5)),
                               )
                             ],
-                          )
+                          ),
                         ]),
                       ),
                     ],
