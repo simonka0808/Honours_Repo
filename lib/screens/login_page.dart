@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:test_honours/db/auth_controller.dart';
 import 'package:test_honours/screens/signin_page.dart';
@@ -6,7 +5,6 @@ import 'package:test_honours/screens/signin_page.dart';
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
 
-  @override
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
 
@@ -129,24 +127,6 @@ class LoginPage extends StatelessWidget {
             const SizedBox(
               height: 55,
             ),
-            // Container(
-            //   width: w * 0.5,
-            //   height: h * 0.08,
-            //   decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(30),
-            //       image: const DecorationImage(
-            //           image: AssetImage("img/blue-btn.png"),
-            //           fit: BoxFit.cover)),
-            //   child: const Center(
-            //     child: Text(
-            //       "Sign in",
-            //       style: TextStyle(
-            //           fontSize: 30,
-            //           fontWeight: FontWeight.bold,
-            //           color: Colors.white),
-            //     ),
-            //   ),
-            // ),
             SizedBox(height: w * 0.05),
             // The GestureDetector wraps the button.
             GestureDetector(
