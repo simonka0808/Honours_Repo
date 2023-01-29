@@ -20,17 +20,21 @@ class BookingCalendarDemoApp extends StatefulWidget {
 
 class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
   final now = DateTime.now();
-  late BookingModel mockBookingService;
-  late Doctor doctorInfo;
+  late BookingModel bookingCalendarModel;
 
   @override
   void initState() {
     super.initState();
-    mockBookingService = BookingModel(
-        apptName: 'Mock Service',
-        apptDuration: 35,
-        bookingEnd: DateTime(now.year, now.month, now.day, 18, 0),
-        bookingStart: DateTime(now.year, now.month, now.day, 8, 0));
+
+    for (var i = 0; i < doctorsList.length; i++) {
+      Doctor doctor = doctorsList[i];
+      print(doctorsList[i].name);
+      bookingCalendarModel = new BookingModel(
+          apptName: 'Mock Service',
+          apptDuration: doctor.duration,
+          bookingEnd: doctor.endHour,
+          bookingStart: doctor.startHour);
+    }
   }
 
   Stream<dynamic>? getBookingStreamMock(
@@ -84,11 +88,11 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Check!'),
+        title: const Text('Book now!'),
       ),
       body: Center(
           child: BookingCalendar(
-        bookingService: mockBookingService,
+        bookingService: bookingCalendarModel,
         convertStreamResultToDateTimeRanges: convertStreamResultMock,
         getBookingStream: getBookingStreamMock,
         uploadBooking: uploadBookingMock,

@@ -6,8 +6,10 @@ class Doctor {
   String info;
   String star;
   String imageUrl;
-  int startHour;
-  int endHour;
+  DateTime startHour;
+  DateTime endHour;
+  int duration;
+  final now = DateTime.now();
 
   Doctor(
       {required this.name,
@@ -16,7 +18,8 @@ class Doctor {
       required this.star,
       required this.imageUrl,
       required this.startHour,
-      required this.endHour});
+      required this.endHour,
+      required this.duration});
 }
 
 List<Doctor> doctorsList = [
@@ -27,8 +30,11 @@ List<Doctor> doctorsList = [
           "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.",
       star: "4.9",
       imageUrl: "img/doctors/doc1.jpg",
-      startHour: 14,
-      endHour: 17),
+      startHour: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 6, 0),
+      endHour: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 15, 0),
+      duration: 15),
   Doctor(
       name: "Doctor Ilhan",
       type: "Ear Doctor",
@@ -36,8 +42,11 @@ List<Doctor> doctorsList = [
           "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.",
       star: "4.9",
       imageUrl: "img/doctors/doc2.jpg",
-      startHour: 10,
-      endHour: 19),
+      startHour: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 5, 0),
+      endHour: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 15, 0),
+      duration: 30),
   Doctor(
       name: "Doctor Rebecca",
       type: "Heart Doctor",
@@ -45,8 +54,11 @@ List<Doctor> doctorsList = [
           "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.",
       star: "5",
       imageUrl: "img/doctors/doc3.jpg",
-      startHour: 15,
-      endHour: 19),
+      startHour: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 9, 0),
+      endHour: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 20, 0),
+      duration: 30),
   Doctor(
       name: "Doc4",
       type: "Eye Doctor",
@@ -54,6 +66,9 @@ List<Doctor> doctorsList = [
           "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.",
       star: "4.8",
       imageUrl: "img/doctors/doc4.jpg",
-      startHour: 8,
-      endHour: 12)
+      startHour: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 8, 0),
+      endHour: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 15, 0),
+      duration: 60),
 ];
