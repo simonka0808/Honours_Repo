@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../components/booking_calendar_main.dart';
 import '../model/booking_service.dart';
 import '../model/enums.dart';
-import 'booking_controller.dart';
+import '../db/booking_controller.dart';
 
 class BookingCalendar extends StatelessWidget {
   const BookingCalendar(
@@ -47,10 +47,10 @@ class BookingCalendar extends StatelessWidget {
   ///for the Calendar picker we use: [TableCalendar]
   ///credit: https://pub.dev/packages/table_calendar
 
-  ///initial [BookingService] which contains the details of the service,
+  ///initial [BookingModel] which contains the details of the service,
   ///and this service will get additional two parameters:
-  ///the [BookingService.bookingStart] and [BookingService.bookingEnd] date of the booking
-  final BookingService bookingService;
+  ///the [BookingModel.bookingStart] and [BookingModel.bookingEnd] date of the booking
+  final BookingModel bookingService;
 
   ///this function returns a [Stream] which will be passed to the [StreamBuilder],
   ///so we can track realtime changes in our Booking Calendar
@@ -68,10 +68,10 @@ class BookingCalendar extends StatelessWidget {
       convertStreamResultToDateTimeRanges;
 
   ///when the user taps the booking button we will call this callback function
-  /// and the updated [BookingService] will be passed to the parameters and you can use this
-  /// in your HTTP function to upload the data to the database ([BookingService] implements JSON serializable)
+  /// and the updated [BookingModel] will be passed to the parameters and you can use this
+  /// in your HTTP function to upload the data to the database ([BookingModel] implements JSON serializable)
 
-  final Future<dynamic> Function({required BookingService newBooking})
+  final Future<dynamic> Function({required BookingModel newBooking})
       uploadBooking;
 
   ///this will be display above the Booking Slots, which can be used to give the user
@@ -150,7 +150,7 @@ class BookingCalendar extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => BookingController(
-          bookingService: bookingService, pauseSlots: pauseSlots),
+          bookingModel: bookingService, pauseSlots: pauseSlots),
       child: BookingCalendarMain(
         key: key,
         getBookingStream: getBookingStream,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CommonCard extends StatelessWidget {
-  const CommonCard({
+class BookingSlot extends StatelessWidget {
+  const BookingSlot({
     Key? key,
     required this.timeSlot,
     this.padding,
@@ -19,13 +19,13 @@ class CommonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: margin,
         padding:
-            padding ?? const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding ?? const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        margin: margin,
         decoration: BoxDecoration(
-          color: color ?? Colors.white,
+          color: color ?? Colors.white70,
           borderRadius:
-              borderRadius ?? const BorderRadius.all(Radius.circular(10)),
+              borderRadius ?? const BorderRadius.all(Radius.circular(3)),
         ),
         child: timeSlot);
   }

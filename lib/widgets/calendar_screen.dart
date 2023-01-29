@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:test_honours/model/doctors.dart';
 
-import 'core/booking_calendar.dart';
-import 'model/booking_service.dart';
-import 'model/enums.dart';
+import '../core/booking_calendar.dart';
+import '../model/booking_service.dart';
+import '../model/enums.dart';
 
 void main() {
   initializeDateFormatting()
@@ -19,16 +20,15 @@ class BookingCalendarDemoApp extends StatefulWidget {
 
 class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
   final now = DateTime.now();
-  late BookingService mockBookingService;
+  late BookingModel mockBookingService;
+  late Doctor doctorInfo;
 
   @override
   void initState() {
     super.initState();
-    // DateTime.now().startOfDay
-    // DateTime.now().endOfDay
-    mockBookingService = BookingService(
-        serviceName: 'Mock Service',
-        serviceDuration: 30,
+    mockBookingService = BookingModel(
+        apptName: 'Mock Service',
+        apptDuration: 35,
         bookingEnd: DateTime(now.year, now.month, now.day, 18, 0),
         bookingStart: DateTime(now.year, now.month, now.day, 8, 0));
   }
@@ -38,8 +38,7 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
     return Stream.value([]);
   }
 
-  Future<dynamic> uploadBookingMock(
-      {required BookingService newBooking}) async {
+  Future<dynamic> uploadBookingMock({required BookingModel newBooking}) async {
     await Future.delayed(const Duration(seconds: 1));
     converted.add(DateTimeRange(
         start: newBooking.bookingStart, end: newBooking.bookingEnd));
@@ -77,39 +76,32 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
     return [
       DateTimeRange(
           start: DateTime(now.year, now.month, now.day, 12, 0),
-          end: DateTime(now.year, now.month, now.day, 13, 0))
+          end: DateTime(now.year, now.month, now.day, 14, 0))
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Booking Calendar Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Booking Calendar Demo'),
-          ),
-          body: Center(
-              child: BookingCalendar(
-            bookingService: mockBookingService,
-            convertStreamResultToDateTimeRanges: convertStreamResultMock,
-            getBookingStream: getBookingStreamMock,
-            uploadBooking: uploadBookingMock,
-            pauseSlots: generatePauseSlots(),
-            pauseSlotText: 'LUNCH',
-            hideBreakTime: false,
-            loadingWidget: const Text('Fetching data...'),
-            uploadingWidget: const CircularProgressIndicator(),
-            locale: 'en_US',
-            startingDayOfWeek: CalendarDays.tuesday,
-            wholeDayIsBookedWidget:
-                const Text('Sorry, for this day everything is booked'),
-            //disabledDates: [DateTime(2023, 1, 20)],
-            //disabledDays: [6, 7],
-          )),
-        ));
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Check!'),
+      ),
+      body: Center(
+          child: BookingCalendar(
+        bookingService: mockBookingService,
+        convertStreamResultToDateTimeRanges: convertStreamResultMock,
+        getBookingStream: getBookingStreamMock,
+        uploadBooking: uploadBookingMock,
+        pauseSlots: generatePauseSlots(),
+        hideBreakTime: false,
+        loadingWidget: const Text('Fetching data...'),
+        uploadingWidget: const CircularProgressIndicator(),
+        locale: 'en_US',
+        startingDayOfWeek: CalendarDays.monday,
+        wholeDayIsBookedWidget: const Text('Fully booked! Choose another day'),
+        //disabledDates: [DateTime(2023, 1, 20)],
+        //disabledDays: [6, 7],
+      )),
+    );
   }
 }

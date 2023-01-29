@@ -3,7 +3,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:test_honours/main.dart';
 
-import '../booking_calendar.dart';
+import 'calendar_screen.dart';
 import '../core/booking_calendar.dart';
 import '../model/booking_service.dart';
 import '../model/doctors.dart';
@@ -12,7 +12,7 @@ import '../model/enums.dart';
 class AppointmentScreen extends StatelessWidget {
   final Doctor doctorInfo;
   final now = DateTime.now();
-  late BookingService mockBookingService;
+  late BookingModel mockBookingService;
 
   AppointmentScreen(this.doctorInfo);
 
@@ -149,7 +149,7 @@ class AppointmentScreen extends StatelessWidget {
             ),
             SizedBox(height: 25),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.only(left: 30, top: 5, right: 30, bottom: 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -185,47 +185,31 @@ class AppointmentScreen extends StatelessWidget {
                       color: Colors.black45.withOpacity(0.6),
                     ),
                   ),
-                  SizedBox(height: 30),
-                  // Column(
-                  //   children: [
-                  //     BookingCalendar(
-                  //       bookingService: mockBookingService,
-                  //       convertStreamResultToDateTimeRanges:
-                  //           convertStreamResultMock,
-                  //       getBookingStream: getBookingStreamMock,
-                  //       uploadBooking: uploadBookingMock,
-                  //       pauseSlots: generatePauseSlots(),
-                  //       pauseSlotText: 'LUNCH',
-                  //       hideBreakTime: false,
-                  //       loadingWidget: const Text('Fetching data...'),
-                  //       uploadingWidget: const CircularProgressIndicator(),
-                  //       locale: 'en_US',
-                  //       startingDayOfWeek: StartingDayOfWeek.tuesday,
-                  //       wholeDayIsBookedWidget: const Text(
-                  //           'Sorry, for this day everything is booked'),
-                  //       //disabledDates: [DateTime(2023, 1, 20)],
-                  //       //disabledDays: [6, 7],
-                  //     )
-                  //   ],
-                  // )
-
+                  SizedBox(height: 40),
                   GestureDetector(
-                    // When the child is tapped, show a snackbar.
-                    onTap: () {
-                      Navigator.of(context).push(new MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              new BookingCalendarDemoApp())); //your login class name
-                    },
-                    // The custom button
-                    child: Container(
-                      padding: const EdgeInsets.all(12.0),
-                      decoration: BoxDecoration(
-                        color: Colors.lightBlue,
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: const Text('Book an Appointment'),
-                    ),
-                  ),
+                      // When the child is tapped, show a snackbar.
+                      onTap: () {
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new BookingCalendarDemoApp())); //your login class name
+                      },
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          padding: const EdgeInsets.all(12.0),
+                          decoration: BoxDecoration(
+                            color: Colors.lightBlue,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: const Text(
+                            'Book an Appointment',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ),
+                        ),
+                      )),
                 ],
               ),
             ),

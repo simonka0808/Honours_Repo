@@ -1,77 +1,47 @@
-class BookingService {
-  ///
-  /// The userId of the currently logged user
-  /// who will start the new booking
-  final String? userId;
+class BookingModel {
+  //user properties
 
-  /// The userName of the currently logged user
-  /// who will start the new booking
-  final String? userName;
+  final String? userID;
 
-  /// The userEmail of the currently logged user
-  /// who will start the new booking
-  final String? userEmail;
+  final String? email;
 
-  /// The userPhoneNumber of the currently logged user
-  /// who will start the new booking
-  final String? userPhoneNumber;
+  //booking properties
 
-  /// The id of the currently selected Service
-  /// for this service will the user start the new booking
+  final String? apptID;
 
-  final String? serviceId;
+  final String apptName;
 
-  ///The name of the currently selected Service
-  final String serviceName;
+  final int apptDuration;
 
-  ///The duration of the currently selected Service
-
-  final int serviceDuration;
-
-  ///The price of the currently selected Service
-
-  final int? servicePrice;
-
-  ///The selected booking slot's starting time
   DateTime bookingStart;
 
-  ///The selected booking slot's ending time
   DateTime bookingEnd;
 
-  BookingService({
-    this.userEmail,
-    this.userPhoneNumber,
-    this.userId,
-    this.userName,
+  BookingModel({
+    this.email,
+    this.userID,
+    required this.apptDuration,
     required this.bookingStart,
     required this.bookingEnd,
-    this.serviceId,
-    required this.serviceName,
-    required this.serviceDuration,
-    this.servicePrice,
+    this.apptID,
+    required this.apptName,
   });
 
-  BookingService.fromJson(Map<String, dynamic> json)
-      : userEmail = json['userEmail'] as String?,
-        userPhoneNumber = json['userPhoneNumber'] as String?,
-        userId = json['userId'] as String?,
-        userName = json['userName'] as String?,
+  BookingModel.fromJson(Map<String, dynamic> json)
+      : email = json['email'] as String?,
+        userID = json['userID'] as String?,
         bookingStart = DateTime.parse(json['bookingStart'] as String),
         bookingEnd = DateTime.parse(json['bookingEnd'] as String),
-        serviceId = json['serviceId'] as String?,
-        serviceName = json['serviceName'] as String,
-        serviceDuration = json['serviceDuration'] as int,
-        servicePrice = json['servicePrice'] as int?;
+        apptID = json['apptID'] as String?,
+        apptDuration = json['apptDuration'] as int,
+        apptName = json['apptName'] as String;
 
   Map<String, dynamic> toJson() => {
-        'userId': userId,
-        'userName': userName,
-        'userEmail': userEmail,
-        'userPhoneNumber': userPhoneNumber,
-        'serviceId': serviceId,
-        'serviceName': serviceName,
-        'serviceDuration': serviceDuration,
-        'servicePrice': servicePrice,
+        'userID': userID,
+        'email': email,
+        'apptID': apptID,
+        'apptDuration': apptDuration,
+        'apptName': apptName,
         'bookingStart': bookingStart.toIso8601String(),
         'bookingEnd': bookingEnd.toIso8601String(),
       };

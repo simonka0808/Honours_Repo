@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class CommonButton extends StatelessWidget {
-  const CommonButton({
+class BookingButton extends StatelessWidget {
+  BookingButton({
     Key? key,
-    required this.text,
-    required this.onTap,
+    required this.buttonText,
+    required this.isClicked,
     this.isActive = true,
     this.isDisabled = false,
     this.buttonStyle,
@@ -13,8 +13,8 @@ class CommonButton extends StatelessWidget {
     this.buttonInActiveColor,
   }) : super(key: key);
 
-  final String text;
-  final VoidCallback onTap;
+  final String buttonText;
+  final VoidCallback isClicked;
   final bool? isActive;
   final bool? isDisabled;
   final TextStyle? buttonStyle;
@@ -22,23 +22,26 @@ class CommonButton extends StatelessWidget {
   final Color? buttonInActiveColor;
   final double? width;
 
-  Color _getButtonColor() {
+  final Color inactiveColor = Colors.lightBlue.shade100;
+  final Color activeColor = Colors.lightBlue;
+
+  Color identifyTextColor() {
     if (isActive == true && isDisabled == false) {
-      return buttonActiveColor ?? Colors.teal;
-    } else if (isActive == false && isDisabled == false) {
       return Colors.white;
+    } else if (isActive == false && isDisabled == false) {
+      return buttonActiveColor ?? activeColor;
     } else {
-      return buttonInActiveColor ?? Colors.teal.shade100;
+      return Colors.white;
     }
   }
 
-  Color _getTextColor() {
+  Color identifyButtonColor() {
     if (isActive == true && isDisabled == false) {
-      return Colors.white;
+      return buttonActiveColor ?? activeColor;
     } else if (isActive == false && isDisabled == false) {
-      return buttonActiveColor ?? Colors.teal;
-    } else {
       return Colors.white;
+    } else {
+      return buttonInActiveColor ?? inactiveColor;
     }
   }
 
@@ -47,18 +50,18 @@ class CommonButton extends StatelessWidget {
     final themeData = Theme.of(context).textTheme;
 
     return InkWell(
-      onTap: (isDisabled == null || isDisabled == false) ? onTap : null,
+      onTap: (isDisabled == null || isDisabled == false) ? isClicked : null,
       child: Container(
         width: width ?? double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: _getButtonColor(),
-          borderRadius: const BorderRadius.all(Radius.circular(24)),
-          border: (isActive == false && isDisabled == false) ? Border.all(color: Colors.teal, width: 2) : null,
+          color: identifyButtonColor(),
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
         ),
         child: Text(
-          text,
-          style: buttonStyle ?? themeData.button!.copyWith(color: _getTextColor()),
+          buttonText,
+          style: buttonStyle ??
+              themeData.button!.copyWith(color: identifyTextColor()),
           textAlign: TextAlign.center,
         ),
       ),

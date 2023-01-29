@@ -6,8 +6,8 @@ class Doctor {
   String info;
   String star;
   String imageUrl;
-  double startHour;
-  double endHour;
+  int startHour;
+  int endHour;
 
   Doctor(
       {required this.name,
