@@ -6,11 +6,6 @@ import '../core/booking_calendar.dart';
 import '../model/booking_service.dart';
 import '../model/enums.dart';
 
-void main() {
-  initializeDateFormatting()
-      .then((_) => runApp(const BookingCalendarDemoApp()));
-}
-
 class BookingCalendarDemoApp extends StatefulWidget {
   const BookingCalendarDemoApp({Key? key}) : super(key: key);
 
@@ -21,6 +16,7 @@ class BookingCalendarDemoApp extends StatefulWidget {
 class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
   final now = DateTime.now();
   late BookingModel bookingCalendarModel;
+  List<BookingModel> bookingList = [];
 
   @override
   void initState() {
@@ -28,12 +24,11 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
 
     for (var i = 0; i < doctorsList.length; i++) {
       Doctor doctor = doctorsList[i];
-      print(doctorsList[i].name);
-      bookingCalendarModel = new BookingModel(
+      bookingList.add(bookingCalendarModel = new BookingModel(
           apptName: 'Mock Service',
           apptDuration: doctor.duration,
           bookingEnd: doctor.endHour,
-          bookingStart: doctor.startHour);
+          bookingStart: doctor.startHour));
     }
   }
 
