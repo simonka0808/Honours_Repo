@@ -30,6 +30,8 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
           bookingEnd: doctor.endHour,
           bookingStart: doctor.startHour));
     }
+
+    print(bookingList[1].bookingStart);
   }
 
   Stream<dynamic>? getBookingStreamMock(
@@ -81,26 +83,36 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Book now!'),
-      ),
-      body: Center(
-          child: BookingCalendar(
-        bookingService: bookingCalendarModel,
-        convertStreamResultToDateTimeRanges: convertStreamResultMock,
-        getBookingStream: getBookingStreamMock,
-        uploadBooking: uploadBookingMock,
-        pauseSlots: generatePauseSlots(),
-        hideBreakTime: false,
-        loadingWidget: const Text('Fetching data...'),
-        uploadingWidget: const CircularProgressIndicator(),
-        locale: 'en_US',
-        startingDayOfWeek: CalendarDays.monday,
-        wholeDayIsBookedWidget: const Text('Fully booked! Choose another day'),
-        //disabledDates: [DateTime(2023, 1, 20)],
-        //disabledDays: [6, 7],
-      )),
+    double h = MediaQuery.of(context).size.height;
+
+    return Container(
+      height: h,
+      child: ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: bookingList.length,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                BookingCalendar(
+                    bookingService: bookingList[index],
+                    convertStreamResultToDateTimeRanges:
+                        convertStreamResultMock,
+                    getBookingStream: getBookingStreamMock,
+                    uploadBooking: uploadBookingMock,
+                    pauseSlots: generatePauseSlots(),
+                    hideBreakTime: false,
+                    loadingWidget: const Text('Fetching data...'),
+                    uploadingWidget: const CircularProgressIndicator(),
+                    locale: 'en_US',
+                    startingDayOfWeek: CalendarDays.monday,
+                    wholeDayIsBookedWidget:
+                        const Text('Fully booked! Choose another day'),
+                    disabledDates: [DateTime(2023, 1, 20)],
+                    disabledDays: [6, 7])
+              ],
+            );
+          }),
     );
   }
 }
