@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:test_honours/model/doctors.dart';
@@ -17,6 +18,7 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
   final now = DateTime.now();
   late BookingModel bookingCalendarModel;
   List<BookingModel> bookingList = [];
+  List<DateTimeRange> converted = [];
 
   @override
   void initState() {
@@ -30,8 +32,6 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
           bookingEnd: doctor.endHour,
           bookingStart: doctor.startHour));
     }
-
-    print(bookingList[1].bookingStart);
   }
 
   Stream<dynamic>? getBookingStreamMock(
@@ -45,8 +45,6 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
         start: newBooking.bookingStart, end: newBooking.bookingEnd));
     print('${newBooking.toJson()} has been uploaded');
   }
-
-  List<DateTimeRange> converted = [];
 
   List<DateTimeRange> convertStreamResultMock({required dynamic streamResult}) {
     ///here you can parse the streamresult and convert to [List<DateTimeRange>]
@@ -83,36 +81,33 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
 
   @override
   Widget build(BuildContext context) {
-    double h = MediaQuery.of(context).size.height;
-
-    return Container(
-      height: h,
-      child: ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          itemCount: bookingList.length,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                BookingCalendar(
-                    bookingService: bookingList[index],
-                    convertStreamResultToDateTimeRanges:
-                        convertStreamResultMock,
-                    getBookingStream: getBookingStreamMock,
-                    uploadBooking: uploadBookingMock,
-                    pauseSlots: generatePauseSlots(),
-                    hideBreakTime: false,
-                    loadingWidget: const Text('Fetching data...'),
-                    uploadingWidget: const CircularProgressIndicator(),
-                    locale: 'en_US',
-                    startingDayOfWeek: CalendarDays.monday,
-                    wholeDayIsBookedWidget:
-                        const Text('Fully booked! Choose another day'),
-                    disabledDates: [DateTime(2023, 1, 20)],
-                    disabledDays: [6, 7])
-              ],
-            );
-          }),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: new AppBar(
+        title: new Text('Search'),
+      ),
+      body: ListView.builder(
+        shrinkWrap: true,
+        itemCount: 1,
+        physics: ScrollPhysics(),
+        itemBuilder: (context, index) {
+          return new BookingCalendar(
+              bookingService: bookingList[2],
+              convertStreamResultToDateTimeRanges: convertStreamResultMock,
+              getBookingStream: getBookingStreamMock,
+              uploadBooking: uploadBookingMock,
+              pauseSlots: generatePauseSlots(),
+              hideBreakTime: false,
+              loadingWidget: const Text('Fetching data...'),
+              uploadingWidget: const CircularProgressIndicator(),
+              locale: 'en_US',
+              startingDayOfWeek: CalendarDays.monday,
+              wholeDayIsBookedWidget:
+                  const Text('Fully booked! Choose another day'),
+              disabledDates: [DateTime(2023, 4, 20)],
+              disabledDays: [6, 7]);
+        },
+      ),
     );
   }
 }
