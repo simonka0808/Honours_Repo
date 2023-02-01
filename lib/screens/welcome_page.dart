@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:test_honours/screens/profile_page.dart';
 import 'package:test_honours/widgets/doctors_screen.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -22,9 +23,6 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height;
-
     return Scaffold(
       backgroundColor: Colors.lightBlueAccent.shade100,
       body: SafeArea(
@@ -46,14 +44,22 @@ class WelcomePage extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CircleAvatar(
-                                radius: 20,
-                                child: Icon(Icons.person),
-                              ),
-                              Icon(
-                                Icons.notifications_outlined,
-                                size: 30,
-                              )
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        new MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                new ProfilePage(
+                                                  email: email,
+                                                )));
+                                  },
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: CircleAvatar(
+                                      radius: 20,
+                                      child: Icon(Icons.person),
+                                    ),
+                                  ))
                             ],
                           ),
                           SizedBox(height: 10),

@@ -127,7 +127,7 @@ class DoctorsScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             );
           }),

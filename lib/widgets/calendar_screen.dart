@@ -82,32 +82,28 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: new AppBar(
-        title: new Text('Search'),
-      ),
-      body: ListView.builder(
-        shrinkWrap: true,
-        itemCount: 1,
-        physics: ScrollPhysics(),
-        itemBuilder: (context, index) {
-          return new BookingCalendar(
-              bookingService: bookingList[2],
-              convertStreamResultToDateTimeRanges: convertStreamResultMock,
-              getBookingStream: getBookingStreamMock,
-              uploadBooking: uploadBookingMock,
-              pauseSlots: generatePauseSlots(),
-              hideBreakTime: false,
-              loadingWidget: const Text('Fetching data...'),
-              uploadingWidget: const CircularProgressIndicator(),
-              locale: 'en_US',
-              startingDayOfWeek: CalendarDays.monday,
-              wholeDayIsBookedWidget:
-                  const Text('Fully booked! Choose another day'),
-              disabledDates: [DateTime(2023, 4, 20)],
-              disabledDays: [6, 7]);
-        },
-      ),
-    );
+        backgroundColor: Colors.white,
+        appBar: new AppBar(
+          title: new Text('Search'),
+        ),
+        body: Column(
+          children: [
+            new BookingCalendar(
+                bookingService: bookingList[2],
+                convertStreamResultToDateTimeRanges: convertStreamResultMock,
+                getBookingStream: getBookingStreamMock,
+                uploadBooking: uploadBookingMock,
+                pauseSlots: generatePauseSlots(),
+                hideBreakTime: false,
+                loadingWidget: const Text('Fetching data...'),
+                uploadingWidget: const CircularProgressIndicator(),
+                locale: 'en_US',
+                startingDayOfWeek: CalendarDays.monday,
+                wholeDayIsBookedWidget:
+                    const Text('Fully booked! Choose another day'),
+                disabledDates: [DateTime(2023, 4, 20)],
+                disabledDays: [6, 7]),
+          ],
+        ));
   }
 }

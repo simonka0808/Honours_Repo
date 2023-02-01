@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:test_honours/screens/login_page.dart';
-import 'package:test_honours/screens/welcome.dart';
+import 'package:test_honours/screens/profile_page.dart';
+import 'package:test_honours/screens/welcome_page.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find(); //create a static instance
@@ -28,6 +29,7 @@ class AuthController extends GetxController {
       Get.offAll(() => LoginPage());
     } else {
       print("welcome page");
+      Get.offAll(() => ProfilePage(email: user.email!));
       Get.offAll(() => WelcomePage(email: user.email!));
     }
   }
@@ -41,7 +43,7 @@ class AuthController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           titleText: Text(
-            "Account creation failed",
+            "Error while creating the account",
             style: TextStyle(color: Colors.white),
           ),
           messageText: Text(
@@ -55,7 +57,7 @@ class AuthController extends GetxController {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
     } catch (e) {
-      Get.snackbar("About Login", "Login message",
+      Get.snackbar("Login", "Login message",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           titleText: Text(
