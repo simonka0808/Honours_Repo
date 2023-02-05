@@ -163,37 +163,6 @@ class _BookingCalendarMainState extends State<BookingCalendarMain> {
               timeSlot: TableCalendar(
                 startingDayOfWeek: widget.startingDayOfWeek?.toTC() ??
                     tc.StartingDayOfWeek.monday,
-                // holidayPredicate: (day) {
-                //   if (widget.disabledDates == null) return false;
-                //
-                //   bool isHoliday = false;
-                //   for (var holiday in widget.disabledDates!) {
-                //     if (isSameDay(day, holiday)) {
-                //       isHoliday = true;
-                //     }
-                //   }
-                //   return isHoliday;
-                // },
-                // enabledDayPredicate: (day) {
-                //   if (widget.disabledDays == null &&
-                //       widget.disabledDates == null) return true;
-                //
-                //   bool isEnabled = true;
-                //   if (widget.disabledDates != null) {
-                //     for (var holiday in widget.disabledDates!) {
-                //       if (isSameDay(day, holiday)) {
-                //         isEnabled = false;
-                //       }
-                //     }
-                //     if (!isEnabled) return false;
-                //   }
-                //   if (widget.disabledDays != null) {
-                //     isEnabled =
-                //         !widget.disabledDays!.contains(day.weekday);
-                //   }
-                //
-                //   return isEnabled;
-                // },
                 locale: widget.locale,
                 firstDay: calculateFirstDay(),
                 lastDay: widget.lastDay ??

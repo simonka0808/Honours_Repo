@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:math';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -5,18 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_honours/db/auth_controller.dart';
 import 'package:test_honours/assets/bottom_menu.dart';
+import 'package:test_honours/screens/welcome_page.dart';
+import 'package:test_honours/widgets/bmi_calculator.dart';
 import 'screens/login_page.dart';
 import 'dart:core';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp().then((value) => Get.put(AuthController()));
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp().then((value) => Get.put(AuthController()));
 
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({key});
 
   // This widget is the root of your application.
   @override
@@ -35,6 +39,6 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home: new LoginPage());
+        home: new BMICalculator());
   }
 }

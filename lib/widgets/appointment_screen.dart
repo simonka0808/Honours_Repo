@@ -136,7 +136,7 @@ class AppointmentScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        "15 yr",
+                        doctorInfo.experience.toString(),
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w400,
