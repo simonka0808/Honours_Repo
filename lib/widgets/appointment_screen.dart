@@ -191,7 +191,9 @@ class AppointmentScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context).push(new MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                new BookingCalendarDemoApp())); //your login class name
+                                new BookingCalendarDemoApp(
+                                  bookingList: [],
+                                ))); //your login class name
                       },
                       child: Align(
                         alignment: Alignment.center,

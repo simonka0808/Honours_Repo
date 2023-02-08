@@ -10,7 +10,11 @@ import '../model/enums.dart';
 import '../model/doctors.dart';
 
 class BookingCalendarDemoApp extends StatefulWidget {
-  const BookingCalendarDemoApp({Key? key}) : super(key: key);
+  final List<BookingModel> bookingList;
+  const BookingCalendarDemoApp({
+    Key? key,
+    required this.bookingList,
+  }) : super(key: key);
 
   @override
   State<BookingCalendarDemoApp> createState() => _BookingCalendarDemoAppState();
@@ -19,7 +23,7 @@ class BookingCalendarDemoApp extends StatefulWidget {
 class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
   final now = DateTime.now();
   late BookingModel bookingCalendarModel;
-  List<BookingModel> bookingList = [];
+  late List<BookingModel> bookingList = widget.bookingList;
   List<DateTimeRange> converted = [];
 
   @override

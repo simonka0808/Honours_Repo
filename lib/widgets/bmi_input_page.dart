@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:test_honours/components/bmi_calculation.dart';
+import 'package:test_honours/model/bmi_calculator_model.dart';
 import 'package:test_honours/widgets/bmi_result_page.dart';
 import 'package:weight_slider/weight_slider.dart';
 
@@ -12,6 +14,9 @@ class BMICalculator extends StatefulWidget {
 
 class _BMICalculatorState extends State<BMICalculator> {
   final DataRepository repository = DataRepository();
+
+  TextEditingController sampledata1 = new TextEditingController();
+  TextEditingController sampledata2 = new TextEditingController();
 
   int weight = 60;
   double height = 165;

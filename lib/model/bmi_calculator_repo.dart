@@ -16,10 +16,7 @@ class DataRepository {
     return collection.add(bmiCalculator.toJson());
   }
 
-  // 4
-  updatePet(BMICalculatorModel bmiCalculator) async {
-    await collection
-        .doc(bmiCalculator.reference.id)
-        .set(bmiCalculator.toJson());
+  Future<void> addWeight() {
+    return collection.doc('bmi_calculator').set({'weight': 0});
   }
 }
