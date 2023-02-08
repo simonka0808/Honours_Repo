@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:test_honours/assets/bottom_menu.dart';
 import 'package:test_honours/screens/login_page.dart';
 import 'package:test_honours/screens/profile_page.dart';
 import 'package:test_honours/screens/welcome_page.dart';
@@ -31,6 +32,7 @@ class AuthController extends GetxController {
       print("welcome page");
       Get.offAll(() => ProfilePage(email: user.email!));
       Get.offAll(() => WelcomePage(email: user.email!));
+      Get.offAll(() => MyNavigationBar(email: user.email!));
     }
   }
 
@@ -80,7 +82,7 @@ class AuthController extends GetxController {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
-            return WelcomePage(
+            return MyNavigationBar(
               email: '',
             );
           } else {

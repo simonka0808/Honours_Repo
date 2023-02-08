@@ -19,7 +19,7 @@ class DoctorsScreen extends StatelessWidget {
             return Column(
               children: [
                 Container(
-                  height: 240,
+                  height: 200,
                   width: 200,
                   margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   decoration: BoxDecoration(
@@ -51,7 +51,7 @@ class DoctorsScreen extends StatelessWidget {
                                   topRight: Radius.circular(15)),
                               child: Image.asset(
                                 doctor.imageUrl,
-                                height: 160,
+                                height: 120,
                                 width: 200,
                                 fit: BoxFit.cover,
                               ),

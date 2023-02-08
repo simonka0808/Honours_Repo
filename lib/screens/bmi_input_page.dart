@@ -5,21 +5,15 @@ import 'package:test_honours/model/bmi_calculator_model.dart';
 import 'package:test_honours/widgets/bmi_result_page.dart';
 import 'package:weight_slider/weight_slider.dart';
 
-import '../model/bmi_calculator_repo.dart';
-
 class BMICalculator extends StatefulWidget {
   @override
   _BMICalculatorState createState() => _BMICalculatorState();
 }
 
 class _BMICalculatorState extends State<BMICalculator> {
-  final DataRepository repository = DataRepository();
+  TextEditingController weightController = new TextEditingController();
+  TextEditingController heightController = new TextEditingController();
 
-  TextEditingController sampledata1 = new TextEditingController();
-  TextEditingController sampledata2 = new TextEditingController();
-
-  int weight = 60;
-  double height = 165;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -60,13 +54,18 @@ class _BMICalculatorState extends State<BMICalculator> {
             Padding(
               padding:
                   EdgeInsets.only(left: 40, top: 20, right: 40, bottom: 40),
-              child: WeightSlider(
-                weight: weight,
-                minWeight: 40,
-                maxWeight: 120,
-                onChange: (val) => setState(() => this.weight = val),
-                unit: 'kg', // optional
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                controller: weightController,
+                decoration: InputDecoration(hintText: "Input your weight: "),
               ),
+              // child: WeightSlider(
+              //   weight: weight,
+              //   minWeight: 40,
+              //   maxWeight: 120,
+              //   onChange: (val) => setState(() => this.weight = val),
+              //   unit: 'kg', // optional
+              // ),
             ),
             Container(
               padding: EdgeInsets.only(top: 35),
@@ -81,29 +80,46 @@ class _BMICalculatorState extends State<BMICalculator> {
                 ),
               ),
             ),
-            Slider(
-              value: height.toDouble(),
-              min: 110.0,
-              max: 240.0,
-              onChanged: (double value) {
-                setState(() {
-                  this.height = value;
-                });
-              },
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 35),
-              child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                  height.round().toString() + " cm",
-                  style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blueAccent.shade400),
-                ),
+            Padding(
+              padding:
+                  EdgeInsets.only(left: 40, top: 20, right: 40, bottom: 40),
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                controller: heightController,
+                decoration: InputDecoration(hintText: "Input your height: "),
               ),
+              // child: WeightSlider(
+              //   weight: weight,
+              //   minWeight: 40,
+              //   maxWeight: 120,
+              //   onChange: (val) => setState(() => this.weight = val),
+              //   unit: 'kg', // optional
+              // ),
             ),
+
+            // Slider(
+            //   value: height.toDouble(),
+            //   min: 110.0,
+            //   max: 240.0,
+            //   onChanged: (double value) {
+            //     setState(() {
+            //       this.height = value;
+            //     });
+            //   },
+            // ),
+            // Container(
+            //   padding: EdgeInsets.only(top: 35),
+            //   child: Align(
+            //     alignment: Alignment.center,
+            //     child: Text(
+            //       height.round().toString() + " cm",
+            //       style: TextStyle(
+            //           fontSize: 25,
+            //           fontWeight: FontWeight.bold,
+            //           color: Colors.blueAccent.shade400),
+            //     ),
+            //   ),
+            // ),
             Padding(padding: EdgeInsets.all(40)),
             SizedBox(
               width: 220,
@@ -111,8 +127,18 @@ class _BMICalculatorState extends State<BMICalculator> {
               child: ElevatedButton(
                 child: const Text("Calculate"),
                 onPressed: () {
-                  BMICalculation calculation =
-                      BMICalculation(weight: weight, height: height);
+                  BMICalculation calculation = BMICalculation(
+                      weight: int.parse(weightController.text),
+                      height: double.parse(heightController.text));
+
+                  Map<String, dynamic> data = {
+                    "height": heightController.text,
+                    "weight": weightController.text,
+                    "bmiIndex": calculation.bmiCalculateResult().toString(),
+                    "bmiAdvice": calculation.bmiAdvice().toString(),
+                    "bmiCategory": calculation.bmiCategory().toString()
+                  };
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -124,6 +150,9 @@ class _BMICalculatorState extends State<BMICalculator> {
                       ),
                     ),
                   );
+                  FirebaseFirestore.instance
+                      .collection("bmi_calculator")
+                      .add(data);
                 },
                 style: ElevatedButton.styleFrom(
                     padding:

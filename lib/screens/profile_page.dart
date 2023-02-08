@@ -8,9 +8,6 @@ class ProfilePage extends StatelessWidget {
   String email;
   ProfilePage({Key? key, required this.email}) : super(key: key);
 
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +52,7 @@ class ProfilePage extends StatelessWidget {
                         )),
                   ),
                 ),
-                SizedBox(height: 40),
+                SizedBox(height: 20),
                 SizedBox(
                   width: 220,
                   height: 50,
@@ -71,7 +68,7 @@ class ProfilePage extends StatelessWidget {
                         )),
                   ),
                 ),
-                SizedBox(height: 40),
+                SizedBox(height: 20),
                 SizedBox(
                   width: 220,
                   height: 50,
@@ -89,7 +86,7 @@ class ProfilePage extends StatelessWidget {
                         )),
                   ),
                 ),
-                SizedBox(height: 40),
+                SizedBox(height: 20),
                 SizedBox(
                   width: 220,
                   height: 50,

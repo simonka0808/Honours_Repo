@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:test_honours/db/auth_controller.dart';
 import 'package:test_honours/assets/bottom_menu.dart';
 import 'package:test_honours/screens/welcome_page.dart';
-import 'package:test_honours/widgets/bmi_input_page.dart';
+import 'package:test_honours/screens/bmi_input_page.dart';
 import 'screens/login_page.dart';
 import 'dart:core';
 
@@ -20,6 +20,8 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  // final String email;
+
   const MyApp({key});
 
   // This widget is the root of your application.

@@ -128,12 +128,10 @@ class LoginPage extends StatelessWidget {
               height: 55,
             ),
             SizedBox(height: w * 0.05),
-            // The GestureDetector wraps the button.
             GestureDetector(
-              // When the child is tapped, show a snackbar.
               onTap: () {
                 AuthController.instance.login(emailController.text.trim(),
-                    passwordController.text.trim()); //your login class name
+                    passwordController.text.trim());
               },
               // The custom button
               child: Container(

@@ -41,28 +41,7 @@ class WelcomePage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                        new MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                new ProfilePage(
-                                                  email: email,
-                                                )));
-                                  },
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: CircleAvatar(
-                                      radius: 20,
-                                      child: Icon(Icons.person),
-                                    ),
-                                  ))
-                            ],
-                          ),
-                          SizedBox(height: 10),
+                          SizedBox(height: 20),
                           Text(
                             "Hi" + " " + email,
                             style: TextStyle(
@@ -81,7 +60,7 @@ class WelcomePage extends StatelessWidget {
                           Container(
                             margin: EdgeInsets.only(top: 15, bottom: 20),
                             width: MediaQuery.of(context).size.width,
-                            height: 55,
+                            height: 50,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                                 color: Colors.white,
@@ -118,7 +97,7 @@ class WelcomePage extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     Container(
-                      height: 100,
+                      height: 85,
                       child: ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
@@ -131,7 +110,7 @@ class WelcomePage extends StatelessWidget {
                                     vertical: 5,
                                     horizontal: 15,
                                   ),
-                                  height: 65,
+                                  height: 50,
                                   width: 65,
                                   decoration: BoxDecoration(
                                     color: Colors.white30,
@@ -159,7 +138,7 @@ class WelcomePage extends StatelessWidget {
                             );
                           }),
                     ),
-                    SizedBox(height: 15),
+                    SizedBox(height: 10),
                     Padding(
                       padding: EdgeInsets.only(left: 15),
                       child: Text(
