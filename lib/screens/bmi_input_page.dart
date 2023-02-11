@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:test_honours/components/bmi_calculation.dart';
 import 'package:test_honours/model/bmi_calculator_model.dart';
 import 'package:test_honours/widgets/bmi_result_page.dart';
 import 'package:weight_slider/weight_slider.dart';
+
+import '../components/bmi_calculator/bmi_calculation.dart';
 
 class BMICalculator extends StatefulWidget {
   @override
@@ -14,6 +16,7 @@ class _BMICalculatorState extends State<BMICalculator> {
   TextEditingController weightController = new TextEditingController();
   TextEditingController heightController = new TextEditingController();
 
+  final currentUser = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -136,7 +139,8 @@ class _BMICalculatorState extends State<BMICalculator> {
                     "weight": weightController.text,
                     "bmiIndex": calculation.bmiCalculateResult().toString(),
                     "bmiAdvice": calculation.bmiAdvice().toString(),
-                    "bmiCategory": calculation.bmiCategory().toString()
+                    "bmiCategory": calculation.bmiCategory().toString(),
+                    "uid": currentUser.currentUser!.email
                   };
 
                   Navigator.push(

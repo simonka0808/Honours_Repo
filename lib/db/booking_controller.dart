@@ -6,12 +6,13 @@ import '../util/booking_util.dart';
 class BookingController extends ChangeNotifier {
   BookingModel bookingModel;
 
-  BookingController({required this.bookingModel, this.pauseSlots}) {
-    apptStart = bookingModel.bookingStart;
-    apptEnd = bookingModel.bookingEnd;
-    pauseSlots = pauseSlots;
+  BookingController({required this.bookingModel, this.breakSlots}) {
+    apptStart = bookingModel.apptStart;
+    apptEnd = bookingModel.apptEnd;
+
+    breakSlots = breakSlots;
     if (apptStart!.isAfter(apptEnd!)) {
-      throw "error";
+      throw "Appt start cant be after appt end";
     }
     base = apptStart!;
     calculateBookingSlots();
@@ -22,11 +23,11 @@ class BookingController extends ChangeNotifier {
   DateTime? apptStart;
   DateTime? apptEnd;
 
-  List<DateTime> _allBookingSlots = [];
-  List<DateTime> get allBookingSlots => _allBookingSlots;
+  List<DateTime> _allSlotsForBooking = [];
+  List<DateTime> get allSlotsForBooking => _allSlotsForBooking;
 
-  List<DateTimeRange> bookedSlots = [];
-  List<DateTimeRange>? pauseSlots = [];
+  List<DateTimeRange> mainBookedSlotsList = [];
+  List<DateTimeRange>? breakSlots = [];
 
   int _selectedSlot = (-1);
   bool _isUploading = false;
@@ -34,54 +35,56 @@ class BookingController extends ChangeNotifier {
   int get selectedSlot => _selectedSlot;
   bool get isUploading => _isUploading;
 
-  bool _successfullyUploaded = false;
-  bool get isSuccessfullyUploaded => _successfullyUploaded;
+  bool successfullySynced = false;
+  bool get isSynced => successfullySynced;
 
   void initBack() {
     _isUploading = false;
-    _successfullyUploaded = false;
+    successfullySynced = false;
+  }
+
+  int generateSlotsBasedOnDuration() {
+    int availableTimeZones = 24;
+    if (apptStart != null && apptEnd != null) {
+      availableTimeZones =
+          DateTimeRange(start: apptStart!, end: apptEnd!).duration.inHours;
+    }
+    return availableTimeZones;
   }
 
   void calculateBookingSlots() {
-    allBookingSlots.clear();
-    _allBookingSlots = List.generate(_maxServiceFitInADay(),
+    allSlotsForBooking.clear();
+    _allSlotsForBooking = List.generate(generateSlotsBasedOnDuration(),
         (i) => base.add(Duration(minutes: bookingModel.apptDuration) * i));
+  }
+
+  bool checkIfBooked(int slotToBeChecked) {
+    DateTime currentSlotTimeZone =
+        allSlotsForBooking.elementAt(slotToBeChecked);
+    bool flag = false;
+    for (var currentSlot in mainBookedSlotsList) {
+      if (BookingUtil.checkForDoubleBooking(
+          currentSlot.start,
+          currentSlot.end,
+          currentSlotTimeZone,
+          currentSlotTimeZone
+              .add(Duration(minutes: bookingModel.apptDuration)))) {
+        flag = true;
+        break;
+      }
+    }
+    return flag;
   }
 
   bool isFullyBooked() {
     bool fullyBooked = true;
-    for (var i = 0; i < allBookingSlots.length; i++) {
-      if (!isSlotBooked(i)) {
+    for (var i = 0; i < allSlotsForBooking.length; i++) {
+      if (!checkIfBooked(i)) {
         fullyBooked = false;
         break;
       }
     }
     return fullyBooked;
-  }
-
-  int _maxServiceFitInADay() {
-    ///if no serviceOpening and closing was provided we will calculate with 00:00-24:00
-    int openingHours = 24;
-    if (apptStart != null && apptEnd != null) {
-      openingHours =
-          DateTimeRange(start: apptStart!, end: apptEnd!).duration.inHours;
-    }
-
-    ///round down if not the whole service would fit in the last hours
-    return ((openingHours * 60) / bookingModel.apptDuration).floor();
-  }
-
-  bool isSlotBooked(int i) {
-    DateTime checkSlot = allBookingSlots.elementAt(i);
-    bool result = false;
-    for (var slot in bookedSlots) {
-      if (BookingUtil.isDoubleBooking(slot.start, slot.end, checkSlot,
-          checkSlot.add(Duration(minutes: bookingModel.apptDuration)))) {
-        result = true;
-        break;
-      }
-    }
-    return result;
   }
 
   void selectSlot(int i) {
@@ -99,37 +102,40 @@ class BookingController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> generateBookedSlots(List<DateTimeRange> data) async {
-    bookedSlots.clear();
+  Future<void> bookAppt(List<DateTimeRange> _allBookedApptsList) async {
+    mainBookedSlotsList.clear();
     calculateBookingSlots();
 
-    for (var i = 0; i < data.length; i++) {
-      final item = data[i];
-      bookedSlots.add(item);
+    for (var i = 0; i < _allBookedApptsList.length; i++) {
+      final item = _allBookedApptsList[i];
+      mainBookedSlotsList.add(item);
     }
   }
 
-  BookingModel generateNewBookingForUploading() {
-    final bookingDate = allBookingSlots.elementAt(selectedSlot);
-    bookingModel
-      ..bookingStart = (bookingDate)
-      ..bookingEnd =
-          (bookingDate.add(Duration(minutes: bookingModel.apptDuration)));
-    return bookingModel;
-  }
-
-  bool isSlotInPauseTime(DateTime slot) {
-    bool result = false;
-    if (pauseSlots == null) {
-      return result;
+  bool isBreakTime(DateTime slot) {
+    bool flag = false;
+    if (breakSlots == null) {
+      return flag;
     }
-    for (var pauseSlot in pauseSlots!) {
-      if (BookingUtil.isDoubleBooking(pauseSlot.start, pauseSlot.end, slot,
+    for (var singleBreakSlot in breakSlots!) {
+      if (BookingUtil.checkForDoubleBooking(
+          singleBreakSlot.start,
+          singleBreakSlot.end,
+          slot,
           slot.add(Duration(minutes: bookingModel.apptDuration)))) {
-        result = true;
+        flag = true;
         break;
       }
     }
-    return result;
+    return flag;
+  }
+
+  BookingModel createBookingModelToDB() {
+    final bookingDate = allSlotsForBooking.elementAt(selectedSlot);
+    bookingModel
+      ..apptStart = (bookingDate)
+      ..apptEnd =
+          (bookingDate.add(Duration(minutes: bookingModel.apptDuration)));
+    return bookingModel;
   }
 }

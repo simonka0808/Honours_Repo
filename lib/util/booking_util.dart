@@ -3,22 +3,22 @@ import 'package:intl/intl.dart';
 class BookingUtil {
   BookingUtil._();
 
-  static bool isDoubleBooking(DateTime firstStart, DateTime firstEnd,
-      DateTime secondStart, DateTime secondEnd) {
-    return getLatestTime(firstStart, secondStart)
-        .isBefore(getEarliestTime(firstEnd, secondEnd));
+  static DateTime getLatestTime(DateTime firstAppt, DateTime secondAppt) {
+    return firstAppt.isAfterOrEq(secondAppt) ? firstAppt : secondAppt;
   }
 
-  static DateTime getLatestTime(DateTime first, DateTime second) {
-    return first.isAfterOrEq(second) ? first : second;
+  static DateTime getEarliestTime(DateTime firstAppt, DateTime secondAppt) {
+    return firstAppt.isBeforeOrEq(secondAppt) ? firstAppt : secondAppt;
   }
 
-  static DateTime getEarliestTime(DateTime first, DateTime second) {
-    return first.isBeforeOrEq(second) ? first : second;
-  }
-
-  static String formatDateTime(DateTime dt) {
+  static String reformat(DateTime dt) {
     return DateFormat.Hm().format(dt);
+  }
+
+  static bool checkForDoubleBooking(DateTime firstApptStart,
+      DateTime firstApptEnd, DateTime secondApptStart, DateTime secondApptEnd) {
+    return getLatestTime(firstApptStart, secondApptStart)
+        .isBefore(getEarliestTime(firstApptEnd, secondApptEnd));
   }
 }
 

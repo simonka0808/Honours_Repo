@@ -198,17 +198,18 @@ class AppointmentScreen extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.center,
                         child: Container(
-                          padding: const EdgeInsets.all(12.0),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 10.0),
                           decoration: BoxDecoration(
                             color: Colors.lightBlue,
-                            borderRadius: BorderRadius.circular(8.0),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Text(
                             'Book an Appointment',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16),
+                                fontSize: 20),
                           ),
                         ),
                       )),

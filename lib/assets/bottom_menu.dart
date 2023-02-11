@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:test_honours/db/auth_controller.dart';
 import 'package:test_honours/screens/profile_page.dart';
 import 'package:test_honours/screens/welcome_page.dart';
 import 'package:test_honours/screens/bmi_input_page.dart';

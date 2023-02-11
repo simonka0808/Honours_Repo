@@ -35,8 +35,8 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
       bookingList.add(bookingCalendarModel = new BookingModel(
           apptName: 'Mock Service',
           apptDuration: doctor.duration,
-          bookingEnd: doctor.endHour,
-          bookingStart: doctor.startHour));
+          apptEnd: doctor.endHour,
+          apptStart: doctor.startHour));
     }
   }
 
@@ -47,8 +47,8 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
 
   Future<dynamic> uploadBookingMock({required BookingModel newBooking}) async {
     await Future.delayed(const Duration(seconds: 1));
-    converted.add(DateTimeRange(
-        start: newBooking.bookingStart, end: newBooking.bookingEnd));
+    converted.add(
+        DateTimeRange(start: newBooking.apptStart, end: newBooking.apptEnd));
     print('${newBooking.toJson()} has been uploaded');
   }
 
@@ -60,8 +60,8 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
     List<DateTimeRange> converted = [];
     for (var i = 0; i < streamResult.size; i++) {
       final item = streamResult.docs[i].data();
-      converted.add(
-          DateTimeRange(start: (item.bookingStart!), end: (item.bookingEnd!)));
+      converted
+          .add(DateTimeRange(start: (item.apptStart!), end: (item.apptEnd!)));
     }
     return converted;
   }
@@ -110,7 +110,7 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
         child: ListView.builder(
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            itemCount: bookingList.length,
+            itemCount: 1,
             itemBuilder: (context, index) {
               return SizedBox(
                 width: w,
@@ -119,7 +119,7 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
                   children: [
                     Expanded(
                       child: new BookingCalendar(
-                          bookingService: bookingList[index],
+                          bookingService: bookingList.elementAt(0),
                           convertStreamResultToDateTimeRanges:
                               convertStreamResultMock,
                           getBookingStream: getBookingStreamMock,

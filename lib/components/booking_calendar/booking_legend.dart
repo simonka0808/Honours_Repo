@@ -29,7 +29,7 @@ class BookingLegend extends StatelessWidget {
         Text(legendText,
             style: themeData.textTheme.bodyText1
                 ?.copyWith(fontWeight: FontWeight.bold)),
-        SizedBox(height: 30),
+        SizedBox(height: 10),
       ],
     );
   }

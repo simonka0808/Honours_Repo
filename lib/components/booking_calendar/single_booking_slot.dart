@@ -19,13 +19,11 @@ class BookingSlot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding:
-            padding ?? const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         margin: margin,
         decoration: BoxDecoration(
           color: color ?? Colors.white70,
-          borderRadius:
-              borderRadius ?? const BorderRadius.all(Radius.circular(3)),
+          borderRadius: BorderRadius.all(Radius.circular(3)),
         ),
         child: timeSlot);
   }

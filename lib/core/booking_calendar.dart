@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../components/booking_calendar_main.dart';
+import '../components/booking_calendar/booking_widget_interface.dart';
 import '../model/booking_service.dart';
 import '../model/enums.dart';
 import '../db/booking_controller.dart';
@@ -49,7 +49,7 @@ class BookingCalendar extends StatelessWidget {
 
   ///initial [BookingModel] which contains the details of the service,
   ///and this service will get additional two parameters:
-  ///the [BookingModel.bookingStart] and [BookingModel.bookingEnd] date of the booking
+  ///the [BookingModel.apptStart] and [BookingModel.apptEnd] date of the booking
   final BookingModel bookingService;
 
   ///this function returns a [Stream] which will be passed to the [StreamBuilder],
@@ -150,8 +150,8 @@ class BookingCalendar extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => BookingController(
-          bookingModel: bookingService, pauseSlots: pauseSlots),
-      child: BookingCalendarMain(
+          bookingModel: bookingService, breakSlots: pauseSlots),
+      child: BookingCalendarInterface(
         key: key,
         getBookingStream: getBookingStream,
         uploadBooking: uploadBooking,

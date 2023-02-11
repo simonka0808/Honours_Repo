@@ -4,17 +4,17 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:table_calendar/table_calendar.dart' as tc
     show StartingDayOfWeek;
 
-import '../db/booking_controller.dart';
-import '../model/booking_service.dart';
-import '../model/enums.dart' as bc;
-import '../util/booking_util.dart';
-import 'booking_legend.dart';
-import 'booking_scheme.dart';
-import 'booking_button.dart';
-import 'single_booking_slot.dart';
+import '../../db/booking_controller.dart';
+import '../../model/booking_service.dart';
+import '../../model/enums.dart' as bc;
+import '../../util/booking_util.dart';
+import '../booking_calendar/single_booking_slot.dart';
+import '../booking_calendar/booking_button.dart';
+import '../booking_calendar/booking_scheme.dart';
+import '../booking_calendar/booking_legend.dart';
 
-class BookingCalendarMain extends StatefulWidget {
-  const BookingCalendarMain({
+class BookingCalendarInterface extends StatefulWidget {
+  const BookingCalendarInterface({
     Key? key,
     required this.getBookingStream,
     required this.convertStreamResultToDateTimeRanges,
@@ -56,7 +56,6 @@ class BookingCalendarMain extends StatefulWidget {
   final List<DateTimeRange> Function({required dynamic streamResult})
       convertStreamResultToDateTimeRanges;
 
-  ///Customizable
   final Widget? bookingExplanation;
   final int? bookingGridCrossAxisCount;
   final double? bookingGridChildAspectRatio;
@@ -68,7 +67,6 @@ class BookingCalendarMain extends StatefulWidget {
   final Color? availableSlotColor;
   final Color? pauseSlotColor;
 
-//Added optional TextStyle to available, booked and selected cards.
   final String? bookedSlotText;
   final String? selectedSlotText;
   final String? availableSlotText;
@@ -93,10 +91,11 @@ class BookingCalendarMain extends StatefulWidget {
   final Widget? wholeDayIsBookedWidget;
 
   @override
-  State<BookingCalendarMain> createState() => _BookingCalendarMainState();
+  State<BookingCalendarInterface> createState() =>
+      _BookingCalendarInterfaceState();
 }
 
-class _BookingCalendarMainState extends State<BookingCalendarMain> {
+class _BookingCalendarInterfaceState extends State<BookingCalendarInterface> {
   late BookingController controller;
   final now = DateTime.now();
 
@@ -110,7 +109,6 @@ class _BookingCalendarMainState extends State<BookingCalendarMain> {
     endOfDay = firstDay.endOfDayAppt(controller.apptEnd!);
     _focusedDay = firstDay;
     _selectedDay = firstDay;
-    // controller.selectFirstDayByHoliday(startOfDay, endOfDay);
   }
 
   CalendarFormat _calendarFormat = CalendarFormat.month;
@@ -155,7 +153,7 @@ class _BookingCalendarMainState extends State<BookingCalendarMain> {
     controller = context.watch<BookingController>();
 
     return Consumer<BookingController>(
-      builder: (_, controller, __) => Padding(
+      builder: (_, controller, __) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         child: Column(
           children: [
@@ -222,6 +220,7 @@ class _BookingCalendarMainState extends State<BookingCalendarMain> {
                   ],
                 ),
             const SizedBox(height: 8),
+            //passing the data into the db
             StreamBuilder<dynamic>(
               stream: widget.getBookingStream(start: startOfDay, end: endOfDay),
               builder: (context, snapshot) {
@@ -237,10 +236,9 @@ class _BookingCalendarMainState extends State<BookingCalendarMain> {
                       const Center(child: CircularProgressIndicator());
                 }
 
-                ///this snapshot should be converted to List<DateTimeRange>
                 final data = snapshot.requireData;
-                controller.generateBookedSlots(widget
-                    .convertStreamResultToDateTimeRanges(streamResult: data));
+                controller.bookAppt(widget.convertStreamResultToDateTimeRanges(
+                    streamResult: data));
 
                 return Expanded(
                   child: (widget.wholeDayIsBookedWidget != null &&
@@ -249,10 +247,10 @@ class _BookingCalendarMainState extends State<BookingCalendarMain> {
                       : GridView.builder(
                           physics: widget.gridScrollPhysics ??
                               const BouncingScrollPhysics(),
-                          itemCount: controller.allBookingSlots.length,
+                          itemCount: controller.allSlotsForBooking.length,
                           itemBuilder: (context, index) {
                             TextStyle? getTextStyle() {
-                              if (controller.isSlotBooked(index)) {
+                              if (controller.checkIfBooked(index)) {
                                 return widget.bookedSlotTextStyle;
                               } else if (index == controller.selectedSlot) {
                                 return widget.selectedSlotTextStyle;
@@ -262,21 +260,21 @@ class _BookingCalendarMainState extends State<BookingCalendarMain> {
                             }
 
                             final slot =
-                                controller.allBookingSlots.elementAt(index);
+                                controller.allSlotsForBooking.elementAt(index);
                             return BookingSchemeAvailability(
                               hideBreakSlot: widget.hideBreakTime,
                               breakSlotColor: widget.pauseSlotColor,
                               availableSlotColor: widget.availableSlotColor,
                               bookedSlotColor: widget.bookedSlotColor,
                               selectedSlotColor: widget.selectedSlotColor,
-                              isBreakTime: controller.isSlotInPauseTime(slot),
-                              isBooked: controller.isSlotBooked(index),
+                              isBreakTime: controller.isBreakTime(slot),
+                              isBooked: controller.checkIfBooked(index),
                               isSelected: index == controller.selectedSlot,
                               isClicked: () => controller.selectSlot(index),
                               timeSlot: Center(
                                 child: Text(
                                   widget.formatDateTime?.call(slot) ??
-                                      BookingUtil.formatDateTime(slot),
+                                      BookingUtil.reformat(slot),
                                   style: getTextStyle(),
                                 ),
                               ),
@@ -297,11 +295,11 @@ class _BookingCalendarMainState extends State<BookingCalendarMain> {
               height: 16,
             ),
             BookingButton(
-              buttonText: widget.bookingButtonText ?? 'Book',
+              buttonText: widget.bookingButtonText ?? 'Book now',
               isClicked: () async {
                 controller.toggleUploading();
                 await widget.uploadBooking(
-                    newBooking: controller.generateNewBookingForUploading());
+                    newBooking: controller.createBookingModelToDB());
                 controller.toggleUploading();
                 controller.resetSelectedSlot();
               },

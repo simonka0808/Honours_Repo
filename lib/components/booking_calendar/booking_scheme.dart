@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'single_booking_slot.dart';
+import 'package:test_honours/components/booking_calendar/single_booking_slot.dart';
 
 class BookingSchemeAvailability extends StatelessWidget {
   const BookingSchemeAvailability({
@@ -22,9 +22,8 @@ class BookingSchemeAvailability extends StatelessWidget {
     return GestureDetector(
       onTap: (!isBooked && !isBreakTime) ? isClicked : null,
       child: BookingSlot(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          margin:
-              const EdgeInsets.only(top: 5, bottom: 25, right: 10, left: 10),
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          margin: EdgeInsets.only(top: 5, bottom: 25, right: 10, left: 10),
           color: identifySlotColor(),
           timeSlot: timeSlot),
     );

@@ -1,8 +1,6 @@
 class BookingModel {
   //user properties
 
-  final String? userID;
-
   final String? email;
 
   //booking properties
@@ -13,36 +11,33 @@ class BookingModel {
 
   final int apptDuration;
 
-  DateTime bookingStart;
+  DateTime apptStart;
 
-  DateTime bookingEnd;
+  DateTime apptEnd;
 
   BookingModel({
     this.email,
-    this.userID,
     required this.apptDuration,
-    required this.bookingStart,
-    required this.bookingEnd,
+    required this.apptStart,
+    required this.apptEnd,
     this.apptID,
     required this.apptName,
   });
 
   BookingModel.fromJson(Map<String, dynamic> json)
       : email = json['email'] as String?,
-        userID = json['userID'] as String?,
-        bookingStart = DateTime.parse(json['bookingStart'] as String),
-        bookingEnd = DateTime.parse(json['bookingEnd'] as String),
+        apptStart = DateTime.parse(json['bookingStart'] as String),
+        apptEnd = DateTime.parse(json['bookingEnd'] as String),
         apptID = json['apptID'] as String?,
         apptDuration = json['apptDuration'] as int,
         apptName = json['apptName'] as String;
 
   Map<String, dynamic> toJson() => {
-        'userID': userID,
         'email': email,
         'apptID': apptID,
         'apptDuration': apptDuration,
         'apptName': apptName,
-        'bookingStart': bookingStart.toIso8601String(),
-        'bookingEnd': bookingEnd.toIso8601String(),
+        'bookingStart': apptStart.toIso8601String(),
+        'bookingEnd': apptEnd.toIso8601String(),
       };
 }
