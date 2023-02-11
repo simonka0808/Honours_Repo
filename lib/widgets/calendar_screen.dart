@@ -8,8 +8,6 @@ import '../core/booking_calendar.dart';
 import '../components/booking_calendar/booking_service.dart';
 import '../model/enums.dart';
 
-import '../model/doctors.dart';
-
 class BookingCalendarDemoApp extends StatefulWidget {
   final List<BookingModel> bookingList;
   const BookingCalendarDemoApp({
@@ -83,30 +81,30 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
         .catchError((error) => print("Failed to add booking: $error"));
   }
 
-  // List<DateTimeRange> convertStreamResultMock({required dynamic streamResult}) {
-  //   ///here you can parse the streamresult and convert to [List<DateTimeRange>]
-  //   ///take care this is only mock, so if you add today as disabledDays it will still be visible on the first load
-  //   ///disabledDays will properly work with real data
-  //   DateTime first = now;
-  //   DateTime tomorrow = now.add(Duration(days: 1));
-  //   DateTime second = now.add(const Duration(minutes: 55));
-  //   DateTime third = now.subtract(const Duration(minutes: 240));
-  //   DateTime fourth = now.subtract(const Duration(minutes: 500));
-  //   converted.add(
-  //       DateTimeRange(start: first, end: now.add(const Duration(minutes: 30))));
-  //   converted.add(DateTimeRange(
-  //       start: second, end: second.add(const Duration(minutes: 23))));
-  //   converted.add(DateTimeRange(
-  //       start: third, end: third.add(const Duration(minutes: 15))));
-  //   converted.add(DateTimeRange(
-  //       start: fourth, end: fourth.add(const Duration(minutes: 50))));
-  //
-  //   //book whole day example
-  //   converted.add(DateTimeRange(
-  //       start: DateTime(tomorrow.year, tomorrow.month, tomorrow.day, 5, 0),
-  //       end: DateTime(tomorrow.year, tomorrow.month, tomorrow.day, 23, 0)));
-  //   return converted;
-  // }
+  List<DateTimeRange> convertStreamResultMock({required dynamic streamResult}) {
+    ///here you can parse the streamresult and convert to [List<DateTimeRange>]
+    ///take care this is only mock, so if you add today as disabledDays it will still be visible on the first load
+    ///disabledDays will properly work with real data
+    DateTime first = now;
+    DateTime tomorrow = now.add(Duration(days: 1));
+    DateTime second = now.add(const Duration(minutes: 55));
+    DateTime third = now.subtract(const Duration(minutes: 240));
+    DateTime fourth = now.subtract(const Duration(minutes: 500));
+    converted.add(
+        DateTimeRange(start: first, end: now.add(const Duration(minutes: 30))));
+    converted.add(DateTimeRange(
+        start: second, end: second.add(const Duration(minutes: 23))));
+    converted.add(DateTimeRange(
+        start: third, end: third.add(const Duration(minutes: 15))));
+    converted.add(DateTimeRange(
+        start: fourth, end: fourth.add(const Duration(minutes: 50))));
+
+    //book whole day example
+    converted.add(DateTimeRange(
+        start: DateTime(tomorrow.year, tomorrow.month, tomorrow.day, 5, 0),
+        end: DateTime(tomorrow.year, tomorrow.month, tomorrow.day, 23, 0)));
+    return converted;
+  }
 
   List<DateTimeRange> generatePauseSlots() {
     return [
