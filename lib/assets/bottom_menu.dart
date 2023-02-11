@@ -23,11 +23,13 @@ class MyNavigationBar extends StatefulWidget {
 class _MyNavigationBarState extends State<MyNavigationBar> {
   int _selectedIndex = 0;
 
+  final currentUser = FirebaseAuth.instance;
+
   final List<Widget> _widgetOptions = <Widget>[
-    WelcomePage(email: "email"),
+    WelcomePage(email: FirebaseAuth.instance.currentUser?.email ?? 'default'),
     BMICalculator(),
     BMICalculator(),
-    ProfilePage(email: "email")
+    ProfilePage(email: FirebaseAuth.instance.currentUser?.email ?? 'default')
   ];
 
   @override

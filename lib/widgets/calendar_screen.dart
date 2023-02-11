@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:test_honours/model/doctors.dart';
 
 import '../core/booking_calendar.dart';
-import '../model/booking_service.dart';
+import '../components/booking_calendar/booking_service.dart';
 import '../model/enums.dart';
 
 import '../model/doctors.dart';
@@ -21,10 +22,14 @@ class BookingCalendarDemoApp extends StatefulWidget {
 }
 
 class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
+  final currentUser = FirebaseAuth.instance;
+
   final now = DateTime.now();
   late BookingModel bookingCalendarModel;
   late List<BookingModel> bookingList = widget.bookingList;
   List<DateTimeRange> converted = [];
+  CollectionReference bookings =
+      FirebaseFirestore.instance.collection('client_bookings');
 
   @override
   void initState() {
@@ -36,20 +41,9 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
           apptName: 'Mock Service',
           apptDuration: doctor.duration,
           apptEnd: doctor.endHour,
+          email: FirebaseAuth.instance.currentUser?.email ?? 'default',
           apptStart: doctor.startHour));
     }
-  }
-
-  Stream<dynamic>? getBookingStreamMock(
-      {required DateTime end, required DateTime start}) {
-    return Stream.value([]);
-  }
-
-  Future<dynamic> uploadBookingMock({required BookingModel newBooking}) async {
-    await Future.delayed(const Duration(seconds: 1));
-    converted.add(
-        DateTimeRange(start: newBooking.apptStart, end: newBooking.apptEnd));
-    print('${newBooking.toJson()} has been uploaded');
   }
 
   // /After you fetched the data from firestore, we only need to have a list of datetimes from the bookings:
@@ -66,30 +60,53 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
     return converted;
   }
 
-  List<DateTimeRange> convertStreamResultMock({required dynamic streamResult}) {
-    ///here you can parse the streamresult and convert to [List<DateTimeRange>]
-    ///take care this is only mock, so if you add today as disabledDays it will still be visible on the first load
-    ///disabledDays will properly work with real data
-    DateTime first = now;
-    DateTime tomorrow = now.add(Duration(days: 1));
-    DateTime second = now.add(const Duration(minutes: 55));
-    DateTime third = now.subtract(const Duration(minutes: 240));
-    DateTime fourth = now.subtract(const Duration(minutes: 500));
-    converted.add(
-        DateTimeRange(start: first, end: now.add(const Duration(minutes: 30))));
-    converted.add(DateTimeRange(
-        start: second, end: second.add(const Duration(minutes: 23))));
-    converted.add(DateTimeRange(
-        start: third, end: third.add(const Duration(minutes: 15))));
-    converted.add(DateTimeRange(
-        start: fourth, end: fourth.add(const Duration(minutes: 50))));
-
-    //book whole day example
-    converted.add(DateTimeRange(
-        start: DateTime(tomorrow.year, tomorrow.month, tomorrow.day, 5, 0),
-        end: DateTime(tomorrow.year, tomorrow.month, tomorrow.day, 23, 0)));
-    return converted;
+  // Stream<dynamic>? getBookingStreamFirebase(
+  //     {required DateTime end, required DateTime start}) {
+  //   return ApiRepository.
+  //       .getBookingStream(placeId: 'YOUR_DOC_ID')
+  //       .where('bookingStart', isGreaterThanOrEqualTo: start)
+  //       .where('bookingStart', isLessThanOrEqualTo: end)
+  //   .snapshots();
+  // }
+  Stream<dynamic>? getBookingStreamMock(
+      {required DateTime end, required DateTime start}) {
+    return Stream.value([]);
   }
+
+  Future<dynamic> uploadBookingFirebase(
+      {required BookingModel newBooking}) async {
+    await bookings
+        .doc('your id, or autogenerate')
+        .collection('bookings')
+        .add(newBooking.toJson())
+        .then((value) => print("Booking Added"))
+        .catchError((error) => print("Failed to add booking: $error"));
+  }
+
+  // List<DateTimeRange> convertStreamResultMock({required dynamic streamResult}) {
+  //   ///here you can parse the streamresult and convert to [List<DateTimeRange>]
+  //   ///take care this is only mock, so if you add today as disabledDays it will still be visible on the first load
+  //   ///disabledDays will properly work with real data
+  //   DateTime first = now;
+  //   DateTime tomorrow = now.add(Duration(days: 1));
+  //   DateTime second = now.add(const Duration(minutes: 55));
+  //   DateTime third = now.subtract(const Duration(minutes: 240));
+  //   DateTime fourth = now.subtract(const Duration(minutes: 500));
+  //   converted.add(
+  //       DateTimeRange(start: first, end: now.add(const Duration(minutes: 30))));
+  //   converted.add(DateTimeRange(
+  //       start: second, end: second.add(const Duration(minutes: 23))));
+  //   converted.add(DateTimeRange(
+  //       start: third, end: third.add(const Duration(minutes: 15))));
+  //   converted.add(DateTimeRange(
+  //       start: fourth, end: fourth.add(const Duration(minutes: 50))));
+  //
+  //   //book whole day example
+  //   converted.add(DateTimeRange(
+  //       start: DateTime(tomorrow.year, tomorrow.month, tomorrow.day, 5, 0),
+  //       end: DateTime(tomorrow.year, tomorrow.month, tomorrow.day, 23, 0)));
+  //   return converted;
+  // }
 
   List<DateTimeRange> generatePauseSlots() {
     return [
@@ -123,7 +140,7 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
                           convertStreamResultToDateTimeRanges:
                               convertStreamResultMock,
                           getBookingStream: getBookingStreamMock,
-                          uploadBooking: uploadBookingMock,
+                          uploadBooking: uploadBookingFirebase,
                           pauseSlots: generatePauseSlots(),
                           hideBreakTime: false,
                           loadingWidget: const Text('Fetching data...'),

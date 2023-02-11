@@ -5,7 +5,7 @@ import 'package:table_calendar/table_calendar.dart' as tc
     show StartingDayOfWeek;
 
 import '../../db/booking_controller.dart';
-import '../../model/booking_service.dart';
+import 'booking_service.dart';
 import '../../model/enums.dart' as bc;
 import '../../util/booking_util.dart';
 import '../booking_calendar/single_booking_slot.dart';

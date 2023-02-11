@@ -5,7 +5,7 @@ import 'package:test_honours/main.dart';
 
 import 'calendar_screen.dart';
 import '../core/booking_calendar.dart';
-import '../model/booking_service.dart';
+import '../components/booking_calendar/booking_service.dart';
 import '../model/doctors.dart';
 import '../model/enums.dart';
 

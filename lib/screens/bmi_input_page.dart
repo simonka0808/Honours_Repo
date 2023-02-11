@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:test_honours/model/bmi_calculator_model.dart';
 import 'package:test_honours/widgets/bmi_result_page.dart';
-import 'package:weight_slider/weight_slider.dart';
 
 import '../components/bmi_calculator/bmi_calculation.dart';
 
