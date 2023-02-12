@@ -9,8 +9,9 @@ import '../components/booking_calendar/booking_service.dart';
 import '../model/enums.dart';
 
 class BookingCalendarDemoApp extends StatefulWidget {
-  final int? currentIndex;
-  const BookingCalendarDemoApp({Key? key, this.currentIndex}) : super(key: key);
+  const BookingCalendarDemoApp({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<BookingCalendarDemoApp> createState() => _BookingCalendarDemoAppState();
@@ -20,21 +21,17 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
   final currentUser = FirebaseAuth.instance;
 
   final now = DateTime.now();
-  late BookingModel bookingCalendarModel;
+
   late List<DateTimeRange> breakHoursList = [];
   List<DateTimeRange> converted = [];
   List<BookingModel> bookingList = [];
-  final ScrollController controller = ScrollController();
+
   CollectionReference bookings =
       FirebaseFirestore.instance.collection('client_bookings');
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final w = MediaQuery.of(context).size.width;
-      controller.jumpTo(w * (widget.currentIndex ?? 0));
-    });
   }
 
   CollectionReference<BookingModel> getBookingStream(
@@ -81,36 +78,42 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
       body: Container(
         height: h,
         width: w,
-        child: ListView.builder(
-            controller: controller,
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: bookingList.length,
-            itemBuilder: (context, index) {
-              return Container(
-                width: w,
-                height: h,
-                color: index.isEven ? Colors.deepPurple : Colors.cyanAccent,
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: BookingCalendar(
-                      bookingService: bookingList.elementAt(index),
-                      getBookingStream: getBookingStreamMock,
-                      uploadBooking: uploadBookingFirebase,
-                      pauseSlots: generatePauseSlots(),
-                      hideBreakTime: false,
-                      loadingWidget: const Text('Fetching data...'),
-                      uploadingWidget: const CircularProgressIndicator(),
-                      locale: 'en_US',
-                      startingDayOfWeek: CalendarDays.monday,
-                      wholeDayIsBookedWidget:
-                          const Text('Fully booked! Choose another day'),
-                    ))
-                  ],
-                ),
-              );
-            }),
+        color: Colors.deepPurple,
+        child: bookingList.isEmpty
+            ? Center(child: Text("Got empty List"))
+            : ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: bookingList.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    width: w,
+                    height: h,
+                    color: index.isEven ? Colors.deepPurple : Colors.cyanAccent,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: h,
+                          width: w,
+                          child: Text("$index"),
+                          // child: BookingCalendar(
+                          //   bookingService: bookingList.elementAt(index),
+                          //   getBookingStream: getBookingStreamMock,
+                          //   uploadBooking: uploadBookingFirebase,
+                          //   pauseSlots: generatePauseSlots(),
+                          //   hideBreakTime: false,
+                          //   loadingWidget: const Text('Fetching data...'),
+                          //   uploadingWidget: const CircularProgressIndicator(),
+                          //   locale: 'en_US',
+                          //   startingDayOfWeek: CalendarDays.monday,
+                          //   wholeDayIsBookedWidget:
+                          //       const Text('Fully booked! Choose another day'),
+                          // ),
+                        )
+                      ],
+                    ),
+                  );
+                }),
       ),
     );
   }

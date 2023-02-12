@@ -12,7 +12,6 @@ import '../model/enums.dart';
 class AppointmentScreen extends StatelessWidget {
   final Doctor doctorInfo;
   final now = DateTime.now();
-  late BookingModel mockBookingService;
 
   AppointmentScreen(this.doctorInfo);
 
@@ -189,11 +188,12 @@ class AppointmentScreen extends StatelessWidget {
                   GestureDetector(
                       // When the child is tapped, show a snackbar.
                       onTap: () {
-                        Navigator.of(context).push(new MaterialPageRoute(
+                        Navigator.of(context).push(
+                          new MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                new BookingCalendarDemoApp(
-                                  currentIndex: 1,
-                                ))); //your login class name
+                                BookingCalendarDemoApp(),
+                          ),
+                        );
                       },
                       child: Align(
                         alignment: Alignment.center,
