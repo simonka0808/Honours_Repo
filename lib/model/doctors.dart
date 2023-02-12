@@ -9,6 +9,8 @@ class Doctor {
   String imageUrl;
   DateTime startHour;
   DateTime endHour;
+  DateTime startBreakHour;
+  DateTime endBreakHour;
   int duration;
   int experience;
   final now = DateTime.now();
@@ -19,6 +21,8 @@ class Doctor {
       required this.patients,
       required this.info,
       required this.star,
+      required this.startBreakHour,
+      required this.endBreakHour,
       required this.imageUrl,
       required this.startHour,
       required this.endHour,
@@ -36,11 +40,15 @@ List<Doctor> doctorsList = [
       star: "4.9",
       imageUrl: "img/doctors/doc1.jpg",
       startHour: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 6, 0),
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 9, 30),
       endHour: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 15, 0),
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 17, 0),
       duration: 15,
-      experience: 14),
+      experience: 14,
+      startBreakHour: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 11, 0),
+      endBreakHour: DateTime(DateTime.now().year, DateTime.now().month,
+          DateTime.now().day, 13, 30)),
   Doctor(
       name: "Doctor Ilhan",
       type: "Ear Doctor",
@@ -54,7 +62,11 @@ List<Doctor> doctorsList = [
       endHour: DateTime(
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 15, 0),
       duration: 30,
-      experience: 10),
+      experience: 10,
+      startBreakHour: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 12, 0),
+      endBreakHour: DateTime(DateTime.now().year, DateTime.now().month,
+          DateTime.now().day, 13, 30)),
   Doctor(
       name: "Doctor Rebecca",
       type: "Heart Doctor",
@@ -68,7 +80,11 @@ List<Doctor> doctorsList = [
       endHour: DateTime(
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 20, 0),
       duration: 30,
-      experience: 20),
+      experience: 20,
+      startBreakHour: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 12, 0),
+      endBreakHour: DateTime(DateTime.now().year, DateTime.now().month,
+          DateTime.now().day, 14, 30)),
   Doctor(
       name: "Doc4",
       type: "Eye Doctor",
@@ -82,5 +98,9 @@ List<Doctor> doctorsList = [
       endHour: DateTime(
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 15, 0),
       duration: 60,
-      experience: 25),
+      experience: 25,
+      startBreakHour: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 12, 0),
+      endBreakHour: DateTime(DateTime.now().year, DateTime.now().month,
+          DateTime.now().day, 13, 30)),
 ];

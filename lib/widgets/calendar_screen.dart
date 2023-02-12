@@ -9,11 +9,8 @@ import '../components/booking_calendar/booking_service.dart';
 import '../model/enums.dart';
 
 class BookingCalendarDemoApp extends StatefulWidget {
-  final List<BookingModel> bookingList;
-  const BookingCalendarDemoApp({
-    Key? key,
-    required this.bookingList,
-  }) : super(key: key);
+  final int? currentIndex;
+  const BookingCalendarDemoApp({Key? key, this.currentIndex}) : super(key: key);
 
   @override
   State<BookingCalendarDemoApp> createState() => _BookingCalendarDemoAppState();
@@ -24,94 +21,56 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
 
   final now = DateTime.now();
   late BookingModel bookingCalendarModel;
-  late List<BookingModel> bookingList = widget.bookingList;
+  late List<DateTimeRange> breakHoursList = [];
   List<DateTimeRange> converted = [];
+  List<BookingModel> bookingList = [];
+  final ScrollController controller = ScrollController();
   CollectionReference bookings =
       FirebaseFirestore.instance.collection('client_bookings');
 
   @override
   void initState() {
     super.initState();
-
-    for (var i = 0; i < doctorsList.length; i++) {
-      Doctor doctor = doctorsList[i];
-      bookingList.add(bookingCalendarModel = new BookingModel(
-          apptName: 'Mock Service',
-          apptDuration: doctor.duration,
-          apptEnd: doctor.endHour,
-          email: FirebaseAuth.instance.currentUser?.email ?? 'default',
-          apptStart: doctor.startHour));
-    }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final w = MediaQuery.of(context).size.width;
+      controller.jumpTo(w * (widget.currentIndex ?? 0));
+    });
   }
 
-  // /After you fetched the data from firestore, we only need to have a list of datetimes from the bookings:
-  List<DateTimeRange> convertStreamResultFirebase(
-      {required dynamic streamResult}) {
-    ///here you can parse the streamresult and convert to [List<DateTimeRange>]
-    ///Note that this is dynamic, so you need to know what properties are available on your result, in our case the [SportBooking] has bookingStart and bookingEnd property
-    List<DateTimeRange> converted = [];
-    for (var i = 0; i < streamResult.size; i++) {
-      final item = streamResult.docs[i].data();
-      converted
-          .add(DateTimeRange(start: (item.apptStart!), end: (item.apptEnd!)));
-    }
-    return converted;
-  }
-
-  // Stream<dynamic>? getBookingStreamFirebase(
-  //     {required DateTime end, required DateTime start}) {
-  //   return ApiRepository.
-  //       .getBookingStream(placeId: 'YOUR_DOC_ID')
-  //       .where('bookingStart', isGreaterThanOrEqualTo: start)
-  //       .where('bookingStart', isLessThanOrEqualTo: end)
-  //   .snapshots();
-  // }
-  Stream<dynamic>? getBookingStreamMock(
-      {required DateTime end, required DateTime start}) {
-    return Stream.value([]);
+  CollectionReference<BookingModel> getBookingStream(
+      {required String placeId}) {
+    return bookings
+        .doc(placeId)
+        .collection('client_bookings')
+        .withConverter<BookingModel>(
+          fromFirestore: (snapshots, _) =>
+              BookingModel.fromJson(snapshots.data()!),
+          toFirestore: (snapshots, _) => snapshots.toJson(),
+        );
   }
 
   Future<dynamic> uploadBookingFirebase(
       {required BookingModel newBooking}) async {
     await bookings
-        .doc('your id, or autogenerate')
-        .collection('bookings')
+        .doc('client_bookings_doc')
+        .collection('client_bookings')
         .add(newBooking.toJson())
-        .then((value) => print("Booking Added"))
-        .catchError((error) => print("Failed to add booking: $error"));
-  }
-
-  List<DateTimeRange> convertStreamResultMock({required dynamic streamResult}) {
-    ///here you can parse the streamresult and convert to [List<DateTimeRange>]
-    ///take care this is only mock, so if you add today as disabledDays it will still be visible on the first load
-    ///disabledDays will properly work with real data
-    DateTime first = now;
-    DateTime tomorrow = now.add(Duration(days: 1));
-    DateTime second = now.add(const Duration(minutes: 55));
-    DateTime third = now.subtract(const Duration(minutes: 240));
-    DateTime fourth = now.subtract(const Duration(minutes: 500));
-    converted.add(
-        DateTimeRange(start: first, end: now.add(const Duration(minutes: 30))));
-    converted.add(DateTimeRange(
-        start: second, end: second.add(const Duration(minutes: 23))));
-    converted.add(DateTimeRange(
-        start: third, end: third.add(const Duration(minutes: 15))));
-    converted.add(DateTimeRange(
-        start: fourth, end: fourth.add(const Duration(minutes: 50))));
-
-    //book whole day example
-    converted.add(DateTimeRange(
-        start: DateTime(tomorrow.year, tomorrow.month, tomorrow.day, 5, 0),
-        end: DateTime(tomorrow.year, tomorrow.month, tomorrow.day, 23, 0)));
-    return converted;
+        .then((value) => print("Successfully added"))
+        .catchError((error) => print("Error: $error"));
   }
 
   List<DateTimeRange> generatePauseSlots() {
-    return [
-      DateTimeRange(
-          start: DateTime(now.year, now.month, now.day, 12, 0),
-          end: DateTime(now.year, now.month, now.day, 14, 0))
-    ];
+    for (var i = 0; i < doctorsList.length; i++) {
+      Doctor doctor = doctorsList[i];
+      breakHoursList.add(DateTimeRange(
+          start: doctor.startBreakHour, end: doctor.endBreakHour));
+    }
+    return breakHoursList;
+  }
+
+  Stream<dynamic>? getBookingStreamMock(
+      {required DateTime end, required DateTime start}) {
+    return Stream.value([]);
   }
 
   @override
@@ -123,33 +82,31 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
         height: h,
         width: w,
         child: ListView.builder(
+            controller: controller,
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            itemCount: 1,
+            itemCount: bookingList.length,
             itemBuilder: (context, index) {
-              return SizedBox(
+              return Container(
                 width: w,
                 height: h,
+                color: index.isEven ? Colors.deepPurple : Colors.cyanAccent,
                 child: Column(
                   children: [
                     Expanded(
-                      child: new BookingCalendar(
-                          bookingService: bookingList.elementAt(0),
-                          convertStreamResultToDateTimeRanges:
-                              convertStreamResultMock,
-                          getBookingStream: getBookingStreamMock,
-                          uploadBooking: uploadBookingFirebase,
-                          pauseSlots: generatePauseSlots(),
-                          hideBreakTime: false,
-                          loadingWidget: const Text('Fetching data...'),
-                          uploadingWidget: const CircularProgressIndicator(),
-                          locale: 'en_US',
-                          startingDayOfWeek: CalendarDays.monday,
-                          wholeDayIsBookedWidget:
-                              const Text('Fully booked! Choose another day'),
-                          disabledDates: [DateTime(2023, 1, 20)],
-                          disabledDays: [6, 7]),
-                    )
+                        child: BookingCalendar(
+                      bookingService: bookingList.elementAt(index),
+                      getBookingStream: getBookingStreamMock,
+                      uploadBooking: uploadBookingFirebase,
+                      pauseSlots: generatePauseSlots(),
+                      hideBreakTime: false,
+                      loadingWidget: const Text('Fetching data...'),
+                      uploadingWidget: const CircularProgressIndicator(),
+                      locale: 'en_US',
+                      startingDayOfWeek: CalendarDays.monday,
+                      wholeDayIsBookedWidget:
+                          const Text('Fully booked! Choose another day'),
+                    ))
                   ],
                 ),
               );
