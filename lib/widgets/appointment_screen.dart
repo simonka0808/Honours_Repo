@@ -12,8 +12,9 @@ import '../model/enums.dart';
 class AppointmentScreen extends StatelessWidget {
   final Doctor doctorInfo;
   final now = DateTime.now();
+  final int currentDoctorIndex;
 
-  AppointmentScreen(this.doctorInfo);
+  AppointmentScreen(this.doctorInfo, {required this.currentDoctorIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +192,8 @@ class AppointmentScreen extends StatelessWidget {
                         Navigator.of(context).push(
                           new MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                BookingCalendarDemoApp(),
+                                BookingCalendarDemoApp(
+                                    activeIndex: currentDoctorIndex),
                           ),
                         );
                       },

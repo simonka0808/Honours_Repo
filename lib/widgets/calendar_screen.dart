@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:test_honours/model/doctors.dart';
 
@@ -9,9 +9,9 @@ import '../components/booking_calendar/booking_service.dart';
 import '../model/enums.dart';
 
 class BookingCalendarDemoApp extends StatefulWidget {
-  const BookingCalendarDemoApp({
-    Key? key,
-  }) : super(key: key);
+  final int activeIndex;
+  const BookingCalendarDemoApp({Key? key, required this.activeIndex})
+      : super(key: key);
 
   @override
   State<BookingCalendarDemoApp> createState() => _BookingCalendarDemoAppState();
@@ -29,9 +29,28 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
   CollectionReference bookings =
       FirebaseFirestore.instance.collection('client_bookings');
 
+  final ScrollController controller = ScrollController();
+
   @override
   void initState() {
     super.initState();
+    for (var i = 0; i < doctorsList.length; i++) {
+      Doctor doctor = doctorsList[i];
+      final bookingCalendarModel = BookingModel(
+          doctorName: doctor.name,
+          apptName: 'Mock Service',
+          apptDuration: doctor.duration,
+          apptEnd: doctor.endHour,
+          email: FirebaseAuth.instance.currentUser?.email ?? 'default',
+          apptStart: doctor.startHour);
+      bookingList.add(bookingCalendarModel);
+    }
+
+    /// nav to that screen
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final w = MediaQuery.of(context).size.width;
+      controller.jumpTo(w * (widget.activeIndex));
+    });
   }
 
   CollectionReference<BookingModel> getBookingStream(
@@ -72,48 +91,58 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
 
   @override
   Widget build(BuildContext context) {
-    double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Container(
-        height: h,
-        width: w,
-        color: Colors.deepPurple,
-        child: bookingList.isEmpty
-            ? Center(child: Text("Got empty List"))
-            : ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: bookingList.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: w,
-                    height: h,
-                    color: index.isEven ? Colors.deepPurple : Colors.cyanAccent,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: h,
+    return SafeArea(
+      child: Scaffold(
+        body: LayoutBuilder(
+          builder: (_, constraints) {
+            final h = constraints.maxHeight;
+            final w = constraints.maxWidth;
+            return Container(
+              height: h,
+              width: w,
+              color: Colors.deepPurple,
+              child: bookingList.isEmpty
+                  ? Center(child: Text("Got empty List"))
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      controller: controller,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: bookingList.length,
+                      itemBuilder: (context, index) {
+                        return Container(
                           width: w,
-                          child: Text("$index"),
-                          // child: BookingCalendar(
-                          //   bookingService: bookingList.elementAt(index),
-                          //   getBookingStream: getBookingStreamMock,
-                          //   uploadBooking: uploadBookingFirebase,
-                          //   pauseSlots: generatePauseSlots(),
-                          //   hideBreakTime: false,
-                          //   loadingWidget: const Text('Fetching data...'),
-                          //   uploadingWidget: const CircularProgressIndicator(),
-                          //   locale: 'en_US',
-                          //   startingDayOfWeek: CalendarDays.monday,
-                          //   wholeDayIsBookedWidget:
-                          //       const Text('Fully booked! Choose another day'),
-                          // ),
-                        )
-                      ],
-                    ),
-                  );
-                }),
+                          height: h,
+                          color: index.isEven
+                              ? Colors.deepPurple
+                              : Colors.cyanAccent,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: h,
+                                width: w,
+                                // child: Text("$index"),
+                                child: BookingCalendar(
+                                  bookingService: bookingList.elementAt(index),
+                                  getBookingStream: getBookingStreamMock,
+                                  uploadBooking: uploadBookingFirebase,
+                                  pauseSlots: generatePauseSlots(),
+                                  hideBreakTime: false,
+                                  loadingWidget: const Text('Fetching data...'),
+                                  uploadingWidget:
+                                      const CircularProgressIndicator(),
+                                  locale: 'en_US',
+                                  startingDayOfWeek: CalendarDays.monday,
+                                  wholeDayIsBookedWidget: const Text(
+                                      'Fully booked! Choose another day'),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      }),
+            );
+          },
+        ),
       ),
     );
   }
