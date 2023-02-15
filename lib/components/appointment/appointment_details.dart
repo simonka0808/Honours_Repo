@@ -10,7 +10,6 @@ class AppointmentDetails extends StatefulWidget {
 
 class _AppointmentDetailsState extends State<AppointmentDetails> {
   TextEditingController descriptionController = new TextEditingController();
-  TextEditingController heightController = new TextEditingController();
 
   final currentUser = FirebaseAuth.instance;
   @override
@@ -37,15 +36,6 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                 ),
               ),
             ),
-            // Padding(
-            //   padding:
-            //       EdgeInsets.only(left: 40, top: 20, right: 40, bottom: 40),
-            //   child: TextFormField(
-            //     keyboardType: TextInputType.number,
-            //     controller: descriptionController,
-            //     decoration: InputDecoration(hintText: "Input your weight: "),
-            //   ),
-            // ),
             Container(
               padding: EdgeInsets.only(top: 35),
               child: Align(
@@ -64,7 +54,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   EdgeInsets.only(left: 40, top: 20, right: 40, bottom: 40),
               child: TextFormField(
                 keyboardType: TextInputType.text,
-                controller: heightController,
+                controller: descriptionController,
                 decoration: InputDecoration(hintText: "What`s the problem? "),
               ), // optional
             ),
@@ -73,15 +63,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
               height: 50,
               child: ElevatedButton(
                 child: const Text("Submit"),
-                onPressed: () {
-                  Map<String, dynamic> appointment_details = {
-                    "description": descriptionController,
-                  };
-                  FirebaseFirestore.instance
-                      .doc('client_bookings_doc')
-                      .collection('client_bookings')
-                      .add(appointment_details);
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                     padding:
                         EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),

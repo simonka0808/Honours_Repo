@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:test_honours/model/doctors.dart';
+import 'package:test_honours/util/booking_business_logic.dart';
 
 import '../core/booking_calendar.dart';
 import '../components/booking_calendar/booking_service.dart';
@@ -38,31 +39,28 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
       Doctor doctor = doctorsList[i];
       final bookingCalendarModel = BookingModel(
           doctorName: doctor.name,
-          apptName: 'Mock Service',
+          apptName: 'test appt name',
           apptDuration: doctor.duration,
           apptEnd: doctor.endHour,
-          email: FirebaseAuth.instance.currentUser?.email ?? 'default',
+          description: 'test description',
+          email: FirebaseAuth.instance.currentUser?.email ?? 'user',
           apptStart: doctor.startHour);
       bookingList.add(bookingCalendarModel);
     }
 
-    /// nav to that screen
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final w = MediaQuery.of(context).size.width;
       controller.jumpTo(w * (widget.activeIndex));
     });
   }
 
-  CollectionReference<BookingModel> getBookingStream(
-      {required String placeId}) {
-    return bookings
-        .doc(placeId)
-        .collection('client_bookings')
-        .withConverter<BookingModel>(
-          fromFirestore: (snapshots, _) =>
-              BookingModel.fromJson(snapshots.data()!),
-          toFirestore: (snapshots, _) => snapshots.toJson(),
-        );
+  Stream<dynamic>? getBookingStreamFirebase(
+      {required DateTime end, required DateTime start}) {
+    return BusinessLogic()
+        .getBookingStream(placeId: 'YOUR_DOC_ID')
+        .where('bookingStart', isGreaterThanOrEqualTo: start)
+        .where('bookingStart', isLessThanOrEqualTo: end)
+        .snapshots();
   }
 
   Future<dynamic> uploadBookingFirebase(
@@ -84,11 +82,6 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
     return breakHoursList;
   }
 
-  Stream<dynamic>? getBookingStreamMock(
-      {required DateTime end, required DateTime start}) {
-    return Stream.value([]);
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -107,6 +100,7 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
                       shrinkWrap: true,
                       controller: controller,
                       scrollDirection: Axis.horizontal,
+                      physics: NeverScrollableScrollPhysics(),
                       itemCount: bookingList.length,
                       itemBuilder: (context, index) {
                         return Container(
@@ -120,10 +114,9 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
                               SizedBox(
                                 height: h,
                                 width: w,
-                                // child: Text("$index"),
                                 child: BookingCalendar(
                                   bookingService: bookingList.elementAt(index),
-                                  getBookingStream: getBookingStreamMock,
+                                  getBookingStream: getBookingStreamFirebase,
                                   uploadBooking: uploadBookingFirebase,
                                   pauseSlots: generatePauseSlots(),
                                   hideBreakTime: false,
