@@ -29,7 +29,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
   final List<Widget> _widgetOptions = <Widget>[
     WelcomePage(email: FirebaseAuth.instance.currentUser?.email ?? 'default'),
     BMICalculator(),
-    BMICalculator(),
+    AppointmentsList(),
     ProfilePage(email: FirebaseAuth.instance.currentUser?.email ?? 'default')
   ];
 

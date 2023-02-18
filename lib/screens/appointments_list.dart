@@ -1,40 +1,48 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// // import 'package:firebase_database/ui/firebase_animated_list.dart';
-// // import 'package:flutter/cupertino.dart';
-// // import 'package:flutter/material.dart';
-// // import 'package:firebase_database/firebase_database.dart';
-//
-// class AppointmentsList extends StatefulWidget {
-//   @override
-//   _AppointmentsListState createState() => _AppointmentsListState();
-// }
-//
-// class _AppointmentsListState extends State<AppointmentsList> {
-//   @override
-//   initState() {
-// a    // // ref = FirebaseDatabase.instance
-//     //     .ref()
-//     //     .child('client_bookings_doc')
-//     //     .orderByChild('bookingStart');
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     double width = MediaQuery.of(context).size.width;
-//
-//     return Scaffold(
-//         backgroundColor: Colors.white,
-//         body: Container(
-//             // child: FirebaseAnimatedList(
-//             //   // query: _ref,
-//             //   itemBuilder: (BuildContext context, DataSnapshot snapshot,
-//             //       Animation<double> animation, int index) {
-//             //     // Map item = snapshot.value;
-//             //     return _buildAppointmentItem();
-//             //   },
-//             // ),
-//             ));
-//   }
-// }
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
+class AppointmentsList extends StatefulWidget {
+  @override
+  _AppointmentsListState createState() => _AppointmentsListState();
+}
+
+class _AppointmentsListState extends State<AppointmentsList> {
+  String bookingStart = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Your upcoming appointments"),
+        ),
+        body: Center(
+          child: FutureBuilder(
+            future: _fetchBookingDataFromFirebase(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done)
+                return Text("Loading data....");
+              return Text("Booking start: $bookingStart");
+            },
+          ),
+        ));
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+
+  _fetchBookingDataFromFirebase() async {
+    final loggedInUser = await FirebaseAuth.instance.currentUser;
+    if (loggedInUser != null) {
+      await FirebaseFirestore.instance
+          .collection('client_bookings_doc')
+          .doc(loggedInUser.email)
+          .get()
+          .then((snapshot) {
+        bookingStart = snapshot.data()!['email'];
+        print(bookingStart);
+      }).catchError((e) {
+        print(e);
+      });
+    }
+  }
+}

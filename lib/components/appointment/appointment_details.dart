@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:test_honours/screens/bmi_input_page.dart';
+import 'package:test_honours/screens/profile_page.dart';
 import 'package:test_honours/screens/welcome_page.dart';
 import 'package:test_honours/widgets/bmi_result_page.dart';
 import 'package:image_picker/image_picker.dart';
@@ -165,10 +167,10 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       .collection('appointment_details')
                       .add(apptDetailsData);
 
-                  // MaterialPageRoute(
-                  //   builder: (context) => WelcomePage(
-                  //       email: currentUser.currentUser!.email.toString()),
-                  // );
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => WelcomePage(
+                            email: currentUser.currentUser!.email.toString(),
+                          )));
                 },
                 style: ElevatedButton.styleFrom(
                     padding:
