@@ -1,7 +1,14 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:test_honours/screens/welcome_page.dart';
 import 'package:test_honours/widgets/bmi_result_page.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 class AppointmentDetails extends StatefulWidget {
   @override
@@ -10,7 +17,8 @@ class AppointmentDetails extends StatefulWidget {
 
 class _AppointmentDetailsState extends State<AppointmentDetails> {
   TextEditingController descriptionController = new TextEditingController();
-
+  String userPhoneNumber = '';
+  String healthRecordURL = '';
   final currentUser = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
@@ -30,7 +38,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                 child: Text(
                   "Give us some information about your case",
                   style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 17,
                       fontWeight: FontWeight.bold,
                       color: Colors.white),
                 ),
@@ -58,12 +66,110 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                 decoration: InputDecoration(hintText: "What`s the problem? "),
               ), // optional
             ),
+            Container(
+              padding:
+                  EdgeInsets.only(left: 40, top: 20, right: 40, bottom: 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Please upload your most recent health record",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.blueAccent.shade400),
+                  ),
+                  SizedBox(height: 20),
+                  IconButton(
+                    onPressed: () async {
+                      ImagePicker imagePickerObject = ImagePicker();
+                      XFile? healthRecordImage = await imagePickerObject
+                          .pickImage(source: ImageSource.camera);
+                      print('${healthRecordImage?.path}');
+
+                      if (healthRecordImage == null) return;
+
+                      String uniqueHealthRecordImageName =
+                          DateTime.now().millisecondsSinceEpoch.toString();
+
+                      Reference healthRecordsRoot =
+                          FirebaseStorage.instance.ref();
+                      Reference referenceDirImages = healthRecordsRoot
+                          .child("past_health_records_collection");
+
+                      Reference healthRecordToUpload =
+                          referenceDirImages.child(uniqueHealthRecordImageName);
+
+                      try {
+                        await healthRecordToUpload
+                            .putFile(File(healthRecordImage!.path));
+                        healthRecordURL =
+                            await healthRecordToUpload.getDownloadURL();
+                        print("Successfully added image");
+                      } catch (error) {
+                        print(error.toString());
+                        print("Unsuccessful");
+                      }
+                    },
+                    icon: Icon(Icons.camera_alt),
+                    iconSize: 40,
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 40, right: 40),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  "Please enter your phone number",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.blueAccent.shade400),
+                ),
+              ),
+            ),
+            SizedBox(height: 15),
+            Container(
+              width: width * 0.8,
+              child: IntlPhoneField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(),
+                  ),
+                ),
+                initialCountryCode: 'GB',
+                onChanged: (phone) {
+                  print(phone.completeNumber);
+                  setState(() {
+                    userPhoneNumber = phone.completeNumber;
+                  });
+                },
+              ),
+            ),
             SizedBox(
               width: 220,
               height: 50,
               child: ElevatedButton(
                 child: const Text("Submit"),
-                onPressed: () {},
+                onPressed: () {
+                  Map<String, String> apptDetailsData = {
+                    'uid': currentUser.currentUser!.email.toString(),
+                    'description': descriptionController.text,
+                    'healthRecordURL': healthRecordURL,
+                    'userPhoneNumber': userPhoneNumber,
+                  };
+                  FirebaseFirestore.instance
+                      .collection('appointment_details')
+                      .add(apptDetailsData);
+
+                  // MaterialPageRoute(
+                  //   builder: (context) => WelcomePage(
+                  //       email: currentUser.currentUser!.email.toString()),
+                  // );
+                },
                 style: ElevatedButton.styleFrom(
                     padding:
                         EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),

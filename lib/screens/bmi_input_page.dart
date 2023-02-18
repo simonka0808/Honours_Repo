@@ -47,7 +47,7 @@ class _BMICalculatorState extends State<BMICalculator> {
                   "Weight (kg)",
                   style: TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.normal,
+                      fontWeight: FontWeight.bold,
                       color: Colors.blueAccent.shade400),
                 ),
               ),
@@ -76,7 +76,7 @@ class _BMICalculatorState extends State<BMICalculator> {
                   "Height (cm)",
                   style: TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.normal,
+                      fontWeight: FontWeight.bold,
                       color: Colors.blueAccent.shade400),
                 ),
               ),

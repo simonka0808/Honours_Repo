@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:test_honours/model/ApiBusinessLogic.dart';
 import 'package:test_honours/model/doctors.dart';
-import 'package:test_honours/util/booking_business_logic.dart';
 
 import '../core/booking_calendar.dart';
 import '../components/booking_calendar/booking_service.dart';
@@ -39,28 +39,31 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
       Doctor doctor = doctorsList[i];
       final bookingCalendarModel = BookingModel(
           doctorName: doctor.name,
-          apptName: 'test appt name',
+          apptName: 'hardcoded for now',
           apptDuration: doctor.duration,
           apptEnd: doctor.endHour,
-          description: 'test description',
-          email: FirebaseAuth.instance.currentUser?.email ?? 'user',
+          email: FirebaseAuth.instance.currentUser?.email ?? 'default',
           apptStart: doctor.startHour);
       bookingList.add(bookingCalendarModel);
     }
 
+    /// nav to that screen
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final w = MediaQuery.of(context).size.width;
       controller.jumpTo(w * (widget.activeIndex));
     });
   }
 
-  Stream<dynamic>? getBookingStreamFirebase(
-      {required DateTime end, required DateTime start}) {
-    return BusinessLogic()
-        .getBookingStream(placeId: 'YOUR_DOC_ID')
-        .where('bookingStart', isGreaterThanOrEqualTo: start)
-        .where('bookingStart', isLessThanOrEqualTo: end)
-        .snapshots();
+  CollectionReference<BookingModel> getBookingStream(
+      {required String placeId}) {
+    return bookings
+        .doc(placeId)
+        .collection('client_bookings')
+        .withConverter<BookingModel>(
+          fromFirestore: (snapshots, _) =>
+              BookingModel.fromJson(snapshots.data()!),
+          toFirestore: (snapshots, _) => snapshots.toJson(),
+        );
   }
 
   Future<dynamic> uploadBookingFirebase(
@@ -82,6 +85,15 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
     return breakHoursList;
   }
 
+  Stream<dynamic>? getBookingStreamFirebase(
+      {required DateTime end, required DateTime start}) {
+    return BusinessLogic()
+        .getBookingStream(apptID: 'YOUR_DOC_ID')
+        .where('bookingStart', isGreaterThanOrEqualTo: start)
+        .where('bookingStart', isLessThanOrEqualTo: end)
+        .snapshots();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -100,8 +112,8 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
                       shrinkWrap: true,
                       controller: controller,
                       scrollDirection: Axis.horizontal,
-                      physics: NeverScrollableScrollPhysics(),
                       itemCount: bookingList.length,
+                      physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return Container(
                           width: w,
@@ -114,6 +126,7 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
                               SizedBox(
                                 height: h,
                                 width: w,
+                                // child: Text("$index"),
                                 child: BookingCalendar(
                                   bookingService: bookingList.elementAt(index),
                                   getBookingStream: getBookingStreamFirebase,

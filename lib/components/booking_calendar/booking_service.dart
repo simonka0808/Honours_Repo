@@ -11,7 +11,7 @@ class BookingModel {
 
   final int apptDuration;
 
-  final String? description;
+  // final String? description;
 
   DateTime apptStart;
 
@@ -28,7 +28,7 @@ class BookingModel {
     required this.apptEnd,
     required this.doctorName,
     this.apptID,
-    this.description,
+    // this.description,
     required this.apptName,
   });
 
@@ -39,8 +39,8 @@ class BookingModel {
         apptID = json['apptID'] as String?,
         apptDuration = json['apptDuration'] as int,
         apptName = json['apptName'] as String,
-        doctorName = json['doctorName'] as String,
-        description = json['description'] as String;
+        doctorName = json['doctorName'] as String;
+  // description = json['description'] as String;
 
   Map<String, dynamic> toJson() => {
         'email': email,
@@ -49,7 +49,7 @@ class BookingModel {
         'apptName': apptName,
         'bookingStart': apptStart.toIso8601String(),
         'bookingEnd': apptEnd.toIso8601String(),
-        'doctorName': doctorName,
-        'description': description
+        'doctorName': doctorName
+        // 'description': description
       };
 }
