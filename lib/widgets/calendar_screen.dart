@@ -98,6 +98,13 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: Text("Choose a slot!"),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
         body: LayoutBuilder(
           builder: (_, constraints) {
             final h = constraints.maxHeight;

@@ -2,12 +2,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:test_honours/screens/bmi_input_page.dart';
-import 'package:test_honours/screens/profile_page.dart';
-import 'package:test_honours/screens/welcome_page.dart';
-import 'package:test_honours/widgets/bmi_result_page.dart';
+import 'package:test_honours/assets/booking_confirmation_box.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -19,6 +16,7 @@ class AppointmentDetails extends StatefulWidget {
 
 class _AppointmentDetailsState extends State<AppointmentDetails> {
   TextEditingController descriptionController = new TextEditingController();
+  TextEditingController phoneNumberController = new TextEditingController();
   String userPhoneNumber = '';
   String healthRecordURL = '';
   final currentUser = FirebaseAuth.instance;
@@ -32,22 +30,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
         child: Column(
           children: [
             Container(
-              width: width,
-              height: 70,
-              color: Colors.lightBlue,
-              child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "Give us some information about your case",
-                  style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 35),
+              padding: EdgeInsets.only(top: 15),
               child: Align(
                 alignment: Alignment.center,
                 child: Text(
@@ -137,6 +120,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
             Container(
               width: width * 0.8,
               child: IntlPhoneField(
+                controller: phoneNumberController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderSide: BorderSide(),
@@ -167,10 +151,11 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       .collection('appointment_details')
                       .add(apptDetailsData);
 
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => WelcomePage(
-                            email: currentUser.currentUser!.email.toString(),
-                          )));
+                  if (descriptionController.text.isNotEmpty &&
+                      phoneNumberController.text.isNotEmpty) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => BookingConfirmation()));
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                     padding:

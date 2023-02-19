@@ -15,13 +15,17 @@ class _AppointmentsListState extends State<AppointmentsList> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Your upcoming appointments"),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
         body: SafeArea(
             child: Column(
           children: [
             StreamBuilder(
                 stream: FirebaseFirestore.instance
-                    .collection('client_bookings')
+                    .collectionGroup('client_bookings')
                     .where('email', isEqualTo: currentUser.currentUser!.email)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
