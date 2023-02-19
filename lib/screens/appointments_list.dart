@@ -8,7 +8,7 @@ class AppointmentsList extends StatefulWidget {
 }
 
 class _AppointmentsListState extends State<AppointmentsList> {
-  String bookingStart = '';
+  final currentUser = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -16,33 +16,28 @@ class _AppointmentsListState extends State<AppointmentsList> {
         appBar: AppBar(
           title: Text("Your upcoming appointments"),
         ),
-        body: Center(
-          child: FutureBuilder(
-            future: _fetchBookingDataFromFirebase(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done)
-                return Text("Loading data....");
-              return Text("Booking start: $bookingStart");
-            },
-          ),
-        ));
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-
-  _fetchBookingDataFromFirebase() async {
-    final loggedInUser = await FirebaseAuth.instance.currentUser;
-    if (loggedInUser != null) {
-      await FirebaseFirestore.instance
-          .collection('client_bookings_doc')
-          .doc(loggedInUser.email)
-          .get()
-          .then((snapshot) {
-        bookingStart = snapshot.data()!['email'];
-        print(bookingStart);
-      }).catchError((e) {
-        print(e);
-      });
-    }
+        body: SafeArea(
+            child: Column(
+          children: [
+            StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('client_bookings')
+                    .where('email', isEqualTo: currentUser.currentUser!.email)
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, i) {
+                          var data = snapshot.data!.docs[i];
+                          Text(data['doctorName']);
+                        });
+                  } else {
+                    return Text("error");
+                  }
+                })
+          ],
+        )));
   }
 }

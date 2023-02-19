@@ -4,9 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_honours/db/auth_controller.dart';
-import 'package:test_honours/assets/bottom_menu.dart';
-import 'package:test_honours/screens/welcome_page.dart';
-import 'package:test_honours/screens/bmi_input_page.dart';
 import 'screens/login_page.dart';
 import 'dart:core';
 
