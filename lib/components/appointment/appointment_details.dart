@@ -9,6 +9,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
+import '../../assets/missing_fields_box.dart';
+
 class AppointmentDetails extends StatefulWidget {
   @override
   _AppointmentDetailsState createState() => _AppointmentDetailsState();
@@ -26,6 +28,13 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text("Provide some details about your case!"),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -151,10 +160,15 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       .collection('appointment_details')
                       .add(apptDetailsData);
 
+                  int len = 0;
                   if (descriptionController.text.isNotEmpty &&
                       phoneNumberController.text.isNotEmpty) {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => BookingConfirmation()));
+                  }
+                  if (descriptionController.text.length != len || userPhoneNumber.isEmpty) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => MissingFieldsSnackBar()));
                   }
                 },
                 style: ElevatedButton.styleFrom(
