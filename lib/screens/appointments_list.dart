@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../model/doctors.dart';
 
@@ -13,33 +16,54 @@ class AppointmentsList extends StatefulWidget {
 class _AppointmentsListState extends State<AppointmentsList> {
   final currentUser = FirebaseAuth.instance;
 
+  static Future<void> opentApptMap() async {
+    for (var i = 0; i < doctorsList.length; i++) {
+      Doctor doctor = doctorsList[i];
+
+      double latitude = doctor.apptLat;
+      double longitude = doctor.apptLng;
+
+      String googleUrl =
+          'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+      if (await canLaunch(googleUrl) != null) {
+        await launch(googleUrl);
+      } else {
+        throw 'Could not open the map.';
+      }
+    }
+
+    // double latitude = 57.152944651282304;
+    // double longitude = -2.102075401560233;
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height * 0.2;
+    double height = MediaQuery.of(context).size.height * 0.27;
     return Scaffold(
         appBar: AppBar(
           title: Text("Upcoming appointments"),
         ),
-        body: SafeArea(
-            child: Column(
-          children: [
-            SizedBox(height: 20),
-            StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collectionGroup('client_bookings')
-                    // .where('email', isEqualTo: currentUser.currentUser!.email)
-                    .snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, i) {
-                          Doctor doctor = doctorsList[i];
-                          var data = snapshot.data!.docs[i];
-                          return SingleChildScrollView(
-                            child: Container(
+        body: Center(
+            child: SingleChildScrollView(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+              SizedBox(height: 20),
+              StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collectionGroup('client_bookings')
+                      // .where('email', isEqualTo: currentUser.currentUser!.email)
+                      .snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          itemCount: snapshot.data!.docs.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, int i) {
+                            var data = snapshot.data!.docs[i];
+                            return Container(
                               height: height,
                               width: width,
                               margin: EdgeInsets.symmetric(
@@ -53,99 +77,113 @@ class _AppointmentsListState extends State<AppointmentsList> {
                                         blurRadius: 5,
                                         spreadRadius: 3)
                                   ]),
-                              child: Column(
-                                children: [
-                                  Stack(
-                                    children: [
-                                      InkWell(
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(15),
-                                              topRight: Radius.circular(15)),
-                                          // child: Image.asset(
-                                          //   doctor.imageUrl,
-                                          //   height: 120,
-                                          //   width: 200,
-                                          //   fit: BoxFit.cover,
-                                          // ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 8),
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: Column(children: [
-                                      Padding(
-                                          padding: EdgeInsets.only(left: 15),
-                                          child: Text(
-                                            "Dr. " + data['doctorName'],
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.blueAccent),
-                                          )),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 5),
-                                          child: Text(
-                                            doctor.type,
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.grey),
-                                          )),
-                                      const Divider(
-                                        height: 22,
-                                        thickness: 0.4,
-                                        // indent: 20,
-                                        // endIndent: 0,
-                                        color: Colors.grey,
-                                      ),
-                                      SizedBox(height: 4),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            data['bookingStart'],
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black87
-                                                    .withOpacity(0.5)),
-                                          )
-                                        ],
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomRight,
+                              child: Align(
+                                  alignment: Alignment.center,
+                                  child: Column(children: [
+                                    Padding(
+                                        padding:
+                                            EdgeInsets.only(left: 15, top: 8),
+                                        child: Text(
+                                          "Dr. " + data['doctorName'],
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueAccent),
+                                        )),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 5),
+                                        child: Text(
+                                          data['doctorType'],
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                              fontSize: 15, color: Colors.grey),
+                                        )),
+                                    const Divider(
+                                      height: 22,
+                                      thickness: 0.4,
+                                      color: Colors.grey,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.access_time_outlined),
+                                        Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              data['bookingStart'],
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black87
+                                                      .withOpacity(0.5)),
+                                            )),
+                                        Icon(Icons.location_on_outlined),
+                                        Expanded(
+                                          flex: 1,
+                                          child: TextButton(
+                                              onPressed: () {
+                                                opentApptMap();
+                                              },
+                                              child: Text(
+                                                data['hospitalName'],
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    decoration: TextDecoration
+                                                        .underline),
+                                              )),
+                                        )
+                                      ],
+                                    ),
+                                    Padding(
+                                        padding: const EdgeInsets.only(top: 5.0),
                                         child: Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 100,
-                                              height: 30,
-                                              child: ElevatedButton(
-                                                child: const Text("Cancel"),
-                                                onPressed: () {},
-                                                style: ElevatedButton.styleFrom(
-                                                    shape: StadiumBorder(),
-                                                    textStyle: TextStyle(
-                                                      fontSize: 15,
-                                                    )),
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: SizedBox(
+                                                // width: 80,
+                                                height: 30,
+                                                child: ElevatedButton(
+                                                  child: const Text("Cancel"),
+                                                  onPressed: () {},
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          shape:
+                                                              StadiumBorder(),
+                                                          textStyle: TextStyle(
+                                                            fontSize: 15,
+                                                          )),
+                                                ),
                                               ),
                                             ),
+                                            Padding(
+                                                padding:
+                                                    EdgeInsets.only(right: 8)),
+                                            Expanded(
+                                              child: SizedBox(
+                                                // width: 80,
+                                                height: 30,
+                                                child: ElevatedButton(
+                                                  child:
+                                                      const Text("Reschedule"),
+                                                  onPressed: () {},
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          shape:
+                                                              StadiumBorder(),
+                                                          textStyle: TextStyle(
+                                                            fontSize: 15,
+                                                          )),
+                                                ),
+                                              ),
+                                            )
                                           ],
-                                        ),
-                                      )
-                                    ]),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        });
-                  } else {
-                    return Text("again error i am done");
-                  }
-                })
-          ],
-        )));
+                                        ))
+                                  ])),
+                            );
+                          });
+                    } else {
+                      return Text("again error i am done");
+                    }
+                  })
+            ]))));
   }
 }

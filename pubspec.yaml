@@ -38,6 +38,7 @@ dependencies:
   firebase_storage: ^11.0.13
   intl_phone_field: ^3.1.0
   firestore_ui: ^1.25.1
+  url_launcher: ^6.1.10
 
 
 

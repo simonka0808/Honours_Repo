@@ -11,6 +11,12 @@ class BookingModel {
 
   final int apptDuration;
 
+  double apptLng;
+
+  double apptLat;
+
+  String hospitalName;
+
   // final String? description;
 
   DateTime apptStart;
@@ -20,6 +26,7 @@ class BookingModel {
   //doctor properties
 
   String doctorName;
+  String doctorType;
 
   BookingModel({
     this.email,
@@ -27,8 +34,12 @@ class BookingModel {
     required this.apptStart,
     required this.apptEnd,
     required this.doctorName,
+    required this.doctorType,
     this.apptID,
+    required this.apptLat,
+    required this.apptLng,
     // this.description,
+    required this.hospitalName,
     required this.apptName,
   });
 
@@ -39,6 +50,10 @@ class BookingModel {
         apptID = json['apptID'] as String?,
         apptDuration = json['apptDuration'] as int,
         apptName = json['apptName'] as String,
+        doctorType = json['doctorType'] as String,
+        apptLat = json['apptLat'] as double,
+        apptLng = json['apptLat'] as double,
+        hospitalName = json['hospitalName'] as String,
         doctorName = json['doctorName'] as String;
   // description = json['description'] as String;
 
@@ -47,8 +62,12 @@ class BookingModel {
         'apptID': apptID,
         'apptDuration': apptDuration,
         'apptName': apptName,
+        'doctorType': doctorType,
+        'apptLat': apptLat.toDouble(),
+        'apptLng': apptLng.toDouble(),
         'bookingStart': apptStart.toIso8601String(),
         'bookingEnd': apptEnd.toIso8601String(),
+        'hospitalName': hospitalName,
         'doctorName': doctorName
         // 'description': description
       };

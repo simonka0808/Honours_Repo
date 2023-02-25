@@ -30,6 +30,7 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
   CollectionReference bookings =
       FirebaseFirestore.instance.collection('client_bookings');
 
+
   final ScrollController controller = ScrollController();
 
   @override
@@ -41,7 +42,11 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
           doctorName: doctor.name,
           apptName: 'hardcoded for now',
           apptDuration: doctor.duration,
+          apptLng: doctor.apptLng,
+          apptLat: doctor.apptLat,
           apptEnd: doctor.endHour,
+          doctorType: doctor.type,
+          hospitalName: doctor.hospitalName,
           email: FirebaseAuth.instance.currentUser?.email ?? 'default',
           apptStart: doctor.startHour);
       bookingList.add(bookingCalendarModel);

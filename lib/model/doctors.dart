@@ -7,10 +7,13 @@ class Doctor {
   String info;
   String star;
   String imageUrl;
+  String hospitalName;
   DateTime startHour;
   DateTime endHour;
   DateTime startBreakHour;
   DateTime endBreakHour;
+  double apptLat;
+  double apptLng;
   int duration;
   int experience;
   final now = DateTime.now();
@@ -27,6 +30,9 @@ class Doctor {
       required this.startHour,
       required this.endHour,
       required this.duration,
+      required this.apptLng,
+      required this.apptLat,
+      required this.hospitalName,
       required this.experience});
 }
 
@@ -35,6 +41,7 @@ List<Doctor> doctorsList = [
       name: "Doctor 1 Olly",
       type: "Dentist",
       patients: "1.7k",
+      hospitalName: "Twin Lakes General Hospital",
       info:
           "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.",
       star: "4.9",
@@ -44,6 +51,8 @@ List<Doctor> doctorsList = [
       endHour: DateTime(
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 17, 0),
       duration: 15,
+      apptLat: 57.152944651282304,
+      apptLng: -2.102075401560233,
       experience: 14,
       startBreakHour: DateTime(
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 11, 0),
@@ -51,8 +60,11 @@ List<Doctor> doctorsList = [
           DateTime.now().day, 13, 30)),
   Doctor(
       name: "Doctor Ilhan",
+      hospitalName: "Hillsdale Clinic",
       type: "Ear Doctor",
       patients: "4.2k",
+      apptLat: 57.152944651282304,
+      apptLng: 30.102075401560233,
       info:
           "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.",
       star: "3.8",
@@ -70,7 +82,10 @@ List<Doctor> doctorsList = [
   Doctor(
       name: "Doctor Rebecca",
       type: "Heart Doctor",
+      hospitalName: "Tranquility Medical Center",
       patients: "3.6k",
+      apptLat: 57.152944651282304,
+      apptLng: 20.102075401560233,
       info:
           "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.",
       star: "5",
@@ -89,6 +104,9 @@ List<Doctor> doctorsList = [
       name: "Doc4",
       type: "Eye Doctor",
       patients: "1.2k",
+      apptLat: 57.152944651282304,
+      apptLng: 2.102075401560233,
+      hospitalName: "Clearwater Valley Clinic",
       info:
           "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.",
       star: "4.8",
