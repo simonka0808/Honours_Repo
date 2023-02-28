@@ -52,13 +52,18 @@ class _AppointmentsListState extends State<AppointmentsList> {
               SizedBox(height: 20),
               StreamBuilder(
                   stream: FirebaseFirestore.instance
-                      .collectionGroup('client_bookings')
-                      // .where('email', isEqualTo: currentUser.currentUser!.email)
+                      .collection('client_bookings')
+                      .where("email",
+                          isEqualTo: FirebaseAuth.instance.currentUser?.email)
                       .snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasData) {
+                    if (snapshot.hasError) {
+                      print(snapshot.hasData);
+                      return Text("error");
+                    } else if (snapshot.hasData) {
+                      print(snapshot.hasData);
                       return ListView.builder(
-                          itemCount: snapshot.data!.docs.length,
+                          itemCount: snapshot.data?.docs.length,
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
                           itemBuilder: (context, int i) {
@@ -134,7 +139,8 @@ class _AppointmentsListState extends State<AppointmentsList> {
                                       ],
                                     ),
                                     Padding(
-                                        padding: const EdgeInsets.only(top: 5.0),
+                                        padding:
+                                            const EdgeInsets.only(top: 5.0),
                                         child: Row(
                                           children: <Widget>[
                                             Expanded(
@@ -181,7 +187,7 @@ class _AppointmentsListState extends State<AppointmentsList> {
                             );
                           });
                     } else {
-                      return Text("again error i am done");
+                      return Text("else");
                     }
                   })
             ]))));

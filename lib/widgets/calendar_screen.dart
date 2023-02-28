@@ -73,8 +73,9 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
 
   Future<dynamic> uploadBookingFirebase(
       {required BookingModel newBooking}) async {
-    await bookings
-        .doc('client_bookings_doc')
+    await bookings;
+        // .doc('client_bookings_doc')
+    FirebaseFirestore.instance
         .collection('client_bookings')
         .add(newBooking.toJson())
         .then((value) => print("Successfully added"))
