@@ -149,7 +149,7 @@ class WelcomePage extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black87.withOpacity(0.7)),
+                              color: Colors.black),
                         ),
                       ),
                       SizedBox(height: 10),

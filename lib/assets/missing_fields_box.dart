@@ -14,10 +14,10 @@ class MissingFieldsSnackBar extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           onPressed: () {
-            Navigator.pop(context, 'Try again');
+            Navigator.pop(context, 'Yes');
 
           },
-          child: const Text('OK'),
+          child: const Text('Try again'),
         ),
       ],
     );

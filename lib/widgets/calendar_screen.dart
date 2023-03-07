@@ -132,8 +132,8 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
                           width: w,
                           height: h,
                           color: index.isEven
-                              ? Colors.deepPurple
-                              : Colors.cyanAccent,
+                              ? Colors.cyanAccent[50]
+                              : Colors.cyanAccent[50],
                           child: Column(
                             children: [
                               SizedBox(

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:test_honours/screens/appointments_list.dart';
 import 'package:test_honours/screens/bmi_input_page.dart';
+import 'package:test_honours/screens/location_screen.dart';
 import 'package:test_honours/screens/profile_page.dart';
 import 'package:test_honours/screens/welcome_page.dart';
 
@@ -47,7 +48,7 @@ class _PersistentBottomNavState extends State<PersistentBottomNav> {
             case 1:
               return CupertinoTabView(
                 builder: (context) {
-                  return CupertinoPageScaffold(child: BMICalculator());
+                  return CupertinoPageScaffold(child: LocationScreen());
                 },
               );
             case 2:
