@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:test_honours/assets/category_skeleton.dart';
 import 'package:test_honours/screens/profile_page.dart';
 import 'package:test_honours/widgets/doctors_screen.dart';
 
@@ -8,17 +9,17 @@ class WelcomePage extends StatelessWidget {
   WelcomePage({Key? key, required this.email}) : super(key: key);
 
   List categories = [
-    "Heart",
+    "Cardiologist",
     "Dentist",
-    "Eye",
-    "Ear",
+    "Psychologist",
+    "Pharmacy",
   ];
 
   List<Icon> categoriesIcons = [
     Icon(MdiIcons.heartPlus, color: Colors.white, size: 30),
     Icon(MdiIcons.toothOutline, color: Colors.white, size: 30),
-    Icon(MdiIcons.eye, color: Colors.white, size: 30),
-    Icon(MdiIcons.earHearing, color: Colors.white, size: 30),
+    Icon(MdiIcons.headCogOutline, color: Colors.white, size: 30),
+    Icon(MdiIcons.pill, color: Colors.white, size: 30),
   ];
 
   @override
@@ -106,28 +107,39 @@ class WelcomePage extends StatelessWidget {
                             itemBuilder: (context, index) {
                               return Column(
                                 children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                      vertical: 5,
-                                      horizontal: 15,
-                                    ),
-                                    height: 50,
-                                    width: 65,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white30,
-                                      shape: BoxShape.circle,
-                                      border:
-                                          Border.all(color: Colors.blueGrey),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.blueAccent,
-                                          blurRadius: 4,
-                                          spreadRadius: 2,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              CategorySkeleton(), //TODO:
                                         ),
-                                      ],
-                                    ),
-                                    child: Center(
-                                      child: categoriesIcons[index],
+                                      );
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.symmetric(
+                                        vertical: 5,
+                                        horizontal: 15,
+                                      ),
+                                      height: 50,
+                                      width: 65,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white30,
+                                        shape: BoxShape.circle,
+                                        border:
+                                            Border.all(color: Colors.blueGrey),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.blueAccent,
+                                            blurRadius: 4,
+                                            spreadRadius: 2,
+                                          ),
+                                        ],
+                                      ),
+                                      child: Center(
+                                        child: categoriesIcons[index],
+                                      ),
                                     ),
                                   ),
                                   SizedBox(height: 5),

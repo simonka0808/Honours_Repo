@@ -114,7 +114,7 @@ List<Doctor> doctorsList = [
       startHour: DateTime(
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 8, 0),
       endHour: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day, 15, 0),
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 21, 0),
       duration: 60,
       experience: 25,
       startBreakHour: DateTime(

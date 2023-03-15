@@ -3,7 +3,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
-
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <application
         android:label="test_honours"
         android:name="${applicationName}"
@@ -36,6 +39,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBxbgRcWbkPHjGOnDPTLLhu5PCX_079WQY"/>
     </application>
     <!-- Provide required visibility configuration for API level 30 and above -->
     <queries>

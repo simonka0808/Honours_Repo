@@ -48,7 +48,7 @@ class _PersistentBottomNavState extends State<PersistentBottomNav> {
             case 1:
               return CupertinoTabView(
                 builder: (context) {
-                  return CupertinoPageScaffold(child: LocationScreen());
+                  return CupertinoPageScaffold(child: NearestHospitals());
                 },
               );
             case 2:

@@ -37,9 +37,13 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
   void initState() {
     super.initState();
     for (var i = 0; i < doctorsList.length; i++) {
+
+      final newGroupRef = FirebaseFirestore.instance.collection('client_bookings').doc(); // Auto-Generated ID reference
+
       Doctor doctor = doctorsList[i];
       final bookingCalendarModel = BookingModel(
           doctorName: doctor.name,
+          apptID: newGroupRef.id,
           apptName: 'hardcoded for now',
           apptDuration: doctor.duration,
           apptLng: doctor.apptLng,

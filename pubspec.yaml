@@ -39,6 +39,11 @@ dependencies:
   intl_phone_field: ^3.1.0
   firestore_ui: ^1.25.1
   url_launcher: ^6.1.10
+  google_maps_flutter: ^2.2.5
+  location: ^4.4.0
+  geolocator: ^9.0.2
+  geocoding: ^2.1.0
+
 
 
 

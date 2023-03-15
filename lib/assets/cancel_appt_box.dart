@@ -5,26 +5,13 @@ import 'package:flutter/material.dart';
 import '../screens/welcome_page.dart';
 
 class CancelApptBox extends StatelessWidget {
-  const CancelApptBox({super.key});
+  late String id;
+  CancelApptBox(String id, {super.key});
 
-  Future deleteAppt() async {
-    QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection("client_bookings").get();
+   deleteAppt(id) async {
 
-    for (int i = 0; i < querySnapshot.docs.length; i++) {
-      var a = querySnapshot.docs[i];
-
-      final collection =
-          FirebaseFirestore.instance.collection('client_bookings');
-      collection
-          .doc(a.id) // <-- Doc ID to be deleted.
-          .delete() // <-- Delete
-          .then((_) => print('Deleted'))
-          .catchError((error) => print('Delete failed: $error'));
-
-      print(a.id);
+    await FirebaseFirestore.instance.collection('client_bookings').doc(id).delete();
     }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +21,7 @@ class CancelApptBox extends StatelessWidget {
         TextButton(
           onPressed: () {
             Navigator.pop(context, 'Yes');
-            deleteAppt();
+            deleteAppt(id);
           },
           child: const Text('Yes',
               style: TextStyle(fontWeight: FontWeight.bold)),

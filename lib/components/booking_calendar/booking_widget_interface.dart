@@ -206,6 +206,7 @@ class _BookingCalendarInterfaceState extends State<BookingCalendarInterface> {
 
                             final slot =
                                 controller.allSlotsForBooking.elementAt(index);
+
                             return BookingSchemeAvailability(
                               isBreakTime: controller.isBreakTime(slot),
                               isBooked: controller.checkIfBooked(index),
