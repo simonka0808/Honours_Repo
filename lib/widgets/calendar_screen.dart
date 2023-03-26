@@ -30,15 +30,15 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
   CollectionReference bookings =
       FirebaseFirestore.instance.collection('client_bookings');
 
-
   final ScrollController controller = ScrollController();
 
   @override
   void initState() {
     super.initState();
     for (var i = 0; i < doctorsList.length; i++) {
-
-      final newGroupRef = FirebaseFirestore.instance.collection('client_bookings').doc(); // Auto-Generated ID reference
+      final newGroupRef = FirebaseFirestore.instance
+          .collection('client_bookings')
+          .doc(); // Auto-Generated ID reference
 
       Doctor doctor = doctorsList[i];
       final bookingCalendarModel = BookingModel(
@@ -78,12 +78,14 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
   Future<dynamic> uploadBookingFirebase(
       {required BookingModel newBooking}) async {
     await bookings;
-        // .doc('client_bookings_doc')
+    // .doc('client_bookings_doc')
     FirebaseFirestore.instance
         .collection('client_bookings')
         .add(newBooking.toJson())
         .then((value) => print("Successfully added"))
         .catchError((error) => print("Error: $error"));
+
+    setState(() {});
   }
 
   List<DateTimeRange> generatePauseSlots() {

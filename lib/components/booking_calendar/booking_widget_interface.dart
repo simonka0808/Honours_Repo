@@ -6,6 +6,7 @@ import 'package:table_calendar/table_calendar.dart' as tc
 import 'package:test_honours/components/appointment/appointment_details.dart';
 
 import '../../db/booking_controller.dart';
+import '../appointment/single_user_booked_provider.dart';
 import 'booking_service.dart';
 import '../../model/enums.dart' as bc;
 import '../../util/booking_util.dart';
@@ -111,9 +112,14 @@ class _BookingCalendarInterfaceState extends State<BookingCalendarInterface> {
     controller.resetSelectedSlot();
   }
 
+  late Stream<dynamic>? stream =
+      widget.getBookingStream(start: startTime, end: endTime);
+
+  //temporary hold for single user book on
+  TempModel? tempModel;
   @override
   Widget build(BuildContext context) {
-    controller = context.watch<BookingController>();
+    // controller = context.watch<BookingController>();
 
     return Consumer<BookingController>(
       builder: (_, controller, __) => Container(
@@ -177,7 +183,7 @@ class _BookingCalendarInterfaceState extends State<BookingCalendarInterface> {
                 ),
             const SizedBox(height: 3),
             StreamBuilder<dynamic>(
-              stream: widget.getBookingStream(start: startTime, end: endTime),
+              stream: stream,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return widget.ifErrorOccursWidget ??
@@ -186,49 +192,65 @@ class _BookingCalendarInterfaceState extends State<BookingCalendarInterface> {
                       );
                 }
 
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                debugPrint(snapshot.data.toString());
                 return Expanded(
                   child: (widget.wholeDayIsBookedWidget != null &&
                           controller.isFullyBooked())
                       ? widget.wholeDayIsBookedWidget!
-                      : GridView.builder(
-                          physics: BouncingScrollPhysics(),
-                          itemCount: controller.allSlotsForBooking.length,
-                          itemBuilder: (context, index) {
-                            TextStyle? getTextStyle() {
-                              if (controller.checkIfBooked(index)) {
-                                return widget.bookedSlotTextStyle;
-                              } else if (index == controller.selectedSlot) {
-                                return widget.selectedSlotTextStyle;
-                              } else {
-                                return widget.availableSlotTextStyle;
+                      : Consumer<UserBooksProvider>(
+                          builder: (context, userBookProvider, child) =>
+                              GridView.builder(
+                            physics: BouncingScrollPhysics(),
+                            itemCount: controller.allSlotsForBooking.length,
+                            itemBuilder: (context, index) {
+                              bool isChecked = userBookProvider.isBooked(
+                                      controller, index) || //todo
+                                  controller.checkIfBooked(index);
+                              TextStyle? getTextStyle() {
+                                if (isChecked) {
+                                  return widget.bookedSlotTextStyle;
+                                } else if (index == controller.selectedSlot) {
+                                  return widget.selectedSlotTextStyle;
+                                } else {
+                                  return widget.availableSlotTextStyle;
+                                }
                               }
-                            }
 
-                            final slot =
-                                controller.allSlotsForBooking.elementAt(index);
+                              final slot = controller.allSlotsForBooking
+                                  .elementAt(index);
 
-                            return BookingSchemeAvailability(
-                              isBreakTime: controller.isBreakTime(slot),
-                              isBooked: controller.checkIfBooked(index),
-                              isSelected: index == controller.selectedSlot,
-                              isClicked: () => controller.selectSlot(index),
-                              breakSlotColor: widget.breakSlotColor,
-                              availableSlotColor: widget.availableSlotColor,
-                              bookedSlotColor: widget.bookedSlotColor,
-                              selectedSlotColor: widget.clickedSlotColor,
-                              timeSlot: Center(
-                                child: Text(
-                                  widget.formatTimeSlotDate?.call(slot) ??
-                                      BookingUtil.reformat(slot),
-                                  style: getTextStyle(),
+                              return BookingSchemeAvailability(
+                                isBreakTime: controller.isBreakTime(slot),
+                                isBooked: isChecked,
+                                isSelected: index == controller.selectedSlot,
+                                isClicked: () {
+                                  controller.selectSlot(index);
+                                  tempModel = TempModel(
+                                      controller.bookingModel.doctorName, slot);
+                                },
+                                breakSlotColor: widget.breakSlotColor,
+                                availableSlotColor: widget.availableSlotColor,
+                                bookedSlotColor: widget.bookedSlotColor,
+                                selectedSlotColor: widget.clickedSlotColor,
+                                timeSlot: Center(
+                                  child: Text(
+                                    widget.formatTimeSlotDate?.call(slot) ??
+                                        BookingUtil.reformat(slot),
+                                    style: getTextStyle(),
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: widget.numberOfRows ?? 2,
-                            childAspectRatio: 2.3,
+                              );
+                            },
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: widget.numberOfRows ?? 2,
+                              childAspectRatio: 2.3,
+                            ),
                           ),
                         ),
                 );
@@ -245,9 +267,18 @@ class _BookingCalendarInterfaceState extends State<BookingCalendarInterface> {
                     newBooking: controller.createBookingModelToDB());
                 controller.toggleUploading();
                 controller.resetSelectedSlot();
-                Navigator.of(context).push(new MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        new AppointmentDetails()));
+                final result = await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            AppointmentDetails()));
+
+                /// means we will get data back from the next page while it is successfully booked the schedule
+                if (result == true && tempModel != null) {
+                  context.read<UserBooksProvider>().addBooking(tempModel!);
+                  // stream =
+                  //     widget.getBookingStream(start: startTime, end: endTime);
+                  // setState(() {});
+                }
               },
               isDisabled: controller.selectedSlot == -1,
               buttonActiveColor: widget.buttonColor,
