@@ -27,7 +27,7 @@ class DoctorsScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.purple,
+                            color: Colors.blueGrey.shade100,
                             blurRadius: 5,
                             spreadRadius: 3)
                       ]),
@@ -41,8 +41,10 @@ class DoctorsScreen extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        AppointmentScreen(doctor)),
+                                  builder: (context) => AppointmentScreen(
+                                      doctor,
+                                      currentDoctorIndex: index), //TODO:
+                                ),
                               );
                             },
                             child: ClipRRect(
@@ -57,32 +59,6 @@ class DoctorsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Container(
-                              margin: EdgeInsets.all(8),
-                              height: 45,
-                              width: 45,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.white30,
-                                    blurRadius: 4,
-                                    spreadRadius: 2,
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.favorite_outline,
-                                  color: Colors.black87,
-                                  size: 30,
-                                ),
-                              ),
-                            ),
-                          )
                         ],
                       ),
                       SizedBox(height: 8),

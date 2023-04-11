@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:test_honours/assets/bottom_menu.dart';
+import 'package:test_honours/assets/persistent_bottom_nav.dart';
 import 'package:test_honours/screens/login_page.dart';
 import 'package:test_honours/screens/profile_page.dart';
 import 'package:test_honours/screens/welcome_page.dart';
@@ -29,10 +29,7 @@ class AuthController extends GetxController {
       print("login page");
       Get.offAll(() => LoginPage());
     } else {
-      print("welcome page");
-      Get.offAll(() => ProfilePage(email: user.email!));
-      Get.offAll(() => WelcomePage(email: user.email!));
-      Get.offAll(() => MyNavigationBar(email: user.email!));
+      Get.offAll(() => PersistentBottomNav());
     }
   }
 
@@ -82,26 +79,24 @@ class AuthController extends GetxController {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
-            return MyNavigationBar(
-              email: '',
-            );
+            return PersistentBottomNav();
           } else {
             return LoginPage();
           }
         });
   }
 
-  signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser =
-        await GoogleSignIn(scopes: <String>["email"]).signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser!.authentication;
-
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    return await FirebaseAuth.instance.signInWithCredential(credential);
-  }
+  // signInWithGoogle() async {
+  //   final GoogleSignInAccount? googleUser =
+  //       await GoogleSignIn(scopes: <String>["email"]).signIn();
+  //   final GoogleSignInAuthentication googleAuth =
+  //       await googleUser!.authentication;
+  //
+  //   final credential = GoogleAuthProvider.credential(
+  //     accessToken: googleAuth.accessToken,
+  //     idToken: googleAuth.idToken,
+  //   );
+  //
+  //   return await FirebaseAuth.instance.signInWithCredential(credential);
+  // }
 }

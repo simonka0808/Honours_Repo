@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_honours/db/auth_controller.dart';
+import 'package:test_honours/screens/bmi_input_page.dart';
 
 class ProfilePage extends StatelessWidget {
   String email;
@@ -57,8 +58,14 @@ class ProfilePage extends StatelessWidget {
                   width: 220,
                   height: 50,
                   child: ElevatedButton(
-                    child: const Text("Support"),
-                    onPressed: () {},
+                    child: const Text("BMI Calculator"),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BMICalculator()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(
                             horizontal: 20.0, vertical: 10.0),

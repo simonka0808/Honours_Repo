@@ -21,24 +21,19 @@ class _BMICalculatorState extends State<BMICalculator> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text("BMI Calculator"),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+
+      ),
       body: SafeArea(
+
         child: Column(
           children: [
-            Container(
-              width: width,
-              height: 70,
-              color: Colors.lightBlue,
-              child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "BMI Calculator",
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ),
-            ),
+
             Container(
               padding: EdgeInsets.only(top: 35),
               child: Align(
@@ -47,7 +42,7 @@ class _BMICalculatorState extends State<BMICalculator> {
                   "Weight (kg)",
                   style: TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.normal,
+                      fontWeight: FontWeight.bold,
                       color: Colors.blueAccent.shade400),
                 ),
               ),
@@ -76,7 +71,7 @@ class _BMICalculatorState extends State<BMICalculator> {
                   "Height (cm)",
                   style: TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.normal,
+                      fontWeight: FontWeight.bold,
                       color: Colors.blueAccent.shade400),
                 ),
               ),
