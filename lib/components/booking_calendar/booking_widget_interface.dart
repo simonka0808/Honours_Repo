@@ -91,6 +91,7 @@ class _BookingCalendarInterfaceState extends State<BookingCalendarInterface> {
     startTime = firstDay.startOfDayAppt(controller.apptStart!);
     endTime = firstDay.endOfDayAppt(controller.apptEnd!);
 
+
     _focusedDay = firstDay;
     _selectedDay = firstDay;
   }

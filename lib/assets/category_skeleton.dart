@@ -1,13 +1,58 @@
 import 'package:flutter/material.dart';
-
-import '../model/doctors.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+import 'package:test_honours/model/doctors_google_sheet.dart';
 
 class CategorySkeleton extends StatefulWidget {
+  // final String name,
+  //     type,
+  //     patients,
+  //     info,
+  //     startHour,
+  //     endHour,
+  //     experience,
+  //     apptLng,
+  //     apptLat;
+  //
+  // CategorySkeleton(
+  //     {required this.name,
+  //     required this.type,
+  //     required this.apptLat,
+  //     required this.apptLng,
+  //     required this.experience,
+  //     required this.endHour,
+  //     required this.startHour,
+  //     required this.info,
+  //     required this.patients});
+
   @override
   _CategorySkeletonState createState() => _CategorySkeletonState();
 }
 
 class _CategorySkeletonState extends State<CategorySkeleton> {
+  List<DoctorsGoogleSheet> doctors = <DoctorsGoogleSheet>[];
+  getDoctorsFromGoogleSheet() async {
+    var url = Uri.parse(
+        "https://script.googleusercontent.com/macros/echo?user_content_key=_69zPekvq-Jls9l62gZiby2w7wG3Bp9H8mWJpEVBFZXHeHIMyy3qKK34ZVBGk7Vr01sshbJrUTQakjjGm29QaBHrvEl9VFJxm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnGR2OjDluDS8WNy2jfGH1i8PUbpRFRcLZ4N4V2t-OFHqxY_GKqXyNl6fnpKytLEDytEkHd4BSfXfDFWTrgYeUsChw9oWEFzd5dz9Jw9Md8uu&lib=MJ5OfjhjaF0waUzUrYk_PD90r5WCT0duK");
+    var raw = await http.get(url);
+    List<dynamic> jsonDoctors = convert.jsonDecode(raw.body);
+
+    // var jsonDoctors = convert.jsonDecode(raw.b
+    // doctors = jsonDoctors.map((json) => DoctorsGoogleSheet.fromJson(json));
+    print('this is json feedback $jsonDoctors');
+
+    jsonDoctors.forEach((element) {
+      print('$element THIS IS NEXT=>>>>>>>');
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getDoctorsFromGoogleSheet();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
@@ -24,105 +69,7 @@ class _CategorySkeletonState extends State<CategorySkeleton> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
-              children: [
-                ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: doctorsList.length,
-                    itemBuilder: (context, index) {
-                      Doctor doctor = doctorsList[index];
-                      return Container(
-                        height: 300,
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: doctorsList.length,
-                            itemBuilder: (context, index) {
-                              Doctor doctor = doctorsList[index];
-                              return Column(
-                                children: [
-                                  Container(
-                                    height: 200,
-                                    width: 200,
-                                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(20),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Colors.blueGrey.shade100,
-                                              blurRadius: 5,
-                                              spreadRadius: 3)
-                                        ]),
-                                    child: Column(
-                                      // crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Stack(
-                                          children: [
-                                            InkWell(
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(15),
-                                                    topRight: Radius.circular(15)),
-                                                child: Image.asset(
-                                                  doctor.imageUrl,
-                                                  height: 120,
-                                                  width: 200,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 8),
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Column(children: [
-                                            Text(
-                                              doctor.name,
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.blueAccent),
-                                            ),
-                                            Text(
-                                              doctor.type,
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.black87.withOpacity(0.5),
-                                              ),
-                                            ),
-                                            SizedBox(height: 4),
-                                            Row(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(horizontal: 34),
-                                                ),
-                                                Icon(
-                                                  Icons.star,
-                                                  color: Colors.yellow,
-                                                ),
-                                                SizedBox(width: 5),
-                                                Text(
-                                                  doctor.star,
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: Colors.black87.withOpacity(0.5)),
-                                                )
-                                              ],
-                                            ),
-                                          ]),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }),
-                      );
-                    }),
-              ],
+              children: [],
             ),
           ),
         ));

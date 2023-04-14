@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:test_honours/model/ApiBusinessLogic.dart';
-import 'package:test_honours/model/doctors.dart';
+import 'package:test_honours/model/our_doctors.dart';
 
 import '../core/booking_calendar.dart';
 import '../components/booking_calendar/booking_service.dart';
@@ -53,6 +53,7 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
           hospitalName: doctor.hospitalName,
           email: FirebaseAuth.instance.currentUser?.email ?? 'default',
           apptStart: doctor.startHour);
+
       bookingList.add(bookingCalendarModel);
     }
 
@@ -102,7 +103,7 @@ class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
     return BusinessLogic()
         .getBookingStream(apptID: 'YOUR_DOC_ID')
         .where('bookingStart', isGreaterThanOrEqualTo: start)
-        .where('bookingStart', isLessThanOrEqualTo: end)
+        // .where('bookingEnd', isLessThanOrEqualTo: end)
         .snapshots();
   }
 

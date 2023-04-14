@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../assets/cancel_appt_box.dart';
-import '../model/doctors.dart';
+import '../model/our_doctors.dart';
 
 class PastAppointments extends StatefulWidget {
   @override

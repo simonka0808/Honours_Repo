@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_honours/model/doctors.dart';
+import 'package:test_honours/model/our_doctors.dart';
 
 import 'appointment_screen.dart';
 
