@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:test_honours/screens/appointments_list.dart';
-import 'package:test_honours/screens/bmi_input_page.dart';
-import 'package:test_honours/screens/location_screen.dart';
-import 'package:test_honours/screens/profile_page.dart';
-import 'package:test_honours/screens/welcome_page.dart';
+import '../screens/appointments_list.dart';
+import '../screens/bmi_input_page.dart';
+import '../screens/location_screen.dart';
+import '../screens/profile_page.dart';
+import '../screens/welcome_page.dart';
 
 class PersistentBottomNav extends StatefulWidget {
   const PersistentBottomNav({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:test_honours/assets/category_skeleton.dart';
-import 'package:test_honours/screens/profile_page.dart';
-import 'package:test_honours/widgets/doctors_screen.dart';
+import '../assets/category_skeleton.dart';
+import '../screens/profile_page.dart';
+import '../widgets/doctors_screen.dart';
 
 class WelcomePage extends StatelessWidget {
   String email;

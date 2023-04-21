@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
-import 'package:test_honours/model/doctors_google_sheet.dart';
+import 'package:test_honours/model/DoctorsGoogleSheet.dart';
 
 class CategorySkeleton extends StatefulWidget {
   // final String name,

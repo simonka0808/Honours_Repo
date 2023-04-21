@@ -67,7 +67,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 
-import '../components/maps/model/nearest_hospital_model.dart';
+import 'package:test_honours/controller/nearest_hospitals/NearestHospitalController.dart';
 
 class NearestHospitals extends StatefulWidget {
   const NearestHospitals({Key? key}) : super(key: key);
@@ -102,7 +102,7 @@ class _NearestHospitalsState extends State<NearestHospitals> {
         child: Column(
           children: [
             ElevatedButton(
-              child: const Text("Near by Hospitals"),
+              child: const Text("Nearby Hospitals"),
               onPressed: () {
                 getNearestHospitals();
               },

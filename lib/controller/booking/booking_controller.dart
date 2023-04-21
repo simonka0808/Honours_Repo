@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../components/booking_calendar/booking_service.dart';
-import '../util/booking_util.dart';
+import '../../components/booking_calendar/booking_service.dart';
+import '../../utilites//booking_util.dart';
 
 class BookingController extends ChangeNotifier {
   BookingModel bookingModel;

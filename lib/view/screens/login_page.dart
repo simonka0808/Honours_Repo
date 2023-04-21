@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:test_honours/db/auth_controller.dart';
-import 'package:test_honours/screens/signin_page.dart';
+import 'package:test_honours/controller/auth/auth_controller.dart';
+import '../screens/signin_page.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -171,4 +171,7 @@ class LoginPage extends StatelessWidget {
           )),
     );
   }
+
+
+
 }

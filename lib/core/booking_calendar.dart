@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../components/booking_calendar/booking_widget_interface.dart';
 import '../components/booking_calendar/booking_service.dart';
 import '../model/enums.dart';
-import '../db/booking_controller.dart';
+import '../controller/booking/booking_controller.dart';
 
 class BookingCalendar extends StatelessWidget {
   const BookingCalendar(

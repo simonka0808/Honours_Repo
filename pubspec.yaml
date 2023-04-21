@@ -59,9 +59,9 @@ flutter:
   assets:  # Lists assets, such as image files
     - img/app_login_page_logo.png
     - img/blue-btn.png
-    # - img/f.png
-    # - img/facebook_logo.png
-    # - img/gmail_logo.png
+#    - img/f.png
+    - img/social_media_logos/facebook_logo.png
+    - img/social_media_logos/gmail_logo.png
     - img/login_avatar.png
     - img/sign_in.jpg
     - img/doctors/doc1.jpg

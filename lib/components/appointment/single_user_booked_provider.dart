@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_honours/components/booking_calendar/booking_service.dart';
-import 'package:test_honours/db/booking_controller.dart';
+import 'package:test_honours/controller/booking/booking_controller.dart';
 
 class TempModel {
   final String doctorName;

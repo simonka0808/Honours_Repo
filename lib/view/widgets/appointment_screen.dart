@@ -4,10 +4,10 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:test_honours/main.dart';
 
 import 'calendar_screen.dart';
-import '../core/booking_calendar.dart';
-import '../components/booking_calendar/booking_service.dart';
-import '../model/our_doctors.dart';
-import '../model/enums.dart';
+import 'package:test_honours/core/booking_calendar.dart';
+import 'package:test_honours/components/booking_calendar/booking_service.dart';
+import 'package:test_honours/local_storage/our_doctors.dart';
+import 'package:test_honours/model/enums.dart';
 
 class AppointmentScreen extends StatelessWidget {
   final Doctor doctorInfo;
@@ -172,7 +172,7 @@ class AppointmentScreen extends StatelessWidget {
                           Navigator.of(context).push(
                             new MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  BookingCalendarDemoApp(
+                                  BookingCalendarApp(
                                       activeIndex: currentDoctorIndex),
                             ),
                           );

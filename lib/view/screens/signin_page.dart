@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_honours/db/auth_controller.dart';
+import 'package:test_honours/controller/auth/auth_controller.dart';
 
 class SignUpPage extends StatelessWidget {
   SignUpPage({Key? key}) : super(key: key);

@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:test_honours/assets/persistent_bottom_nav.dart';
-import 'package:test_honours/screens/login_page.dart';
-import 'package:test_honours/screens/profile_page.dart';
-import 'package:test_honours/screens/welcome_page.dart';
+import 'package:test_honours/view/assets/persistent_bottom_nav.dart';
+import 'package:test_honours/view/screens/login_page.dart';
+import 'package:test_honours/view/screens/profile_page.dart';
+import 'package:test_honours/view/screens/welcome_page.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find(); //create a static instance

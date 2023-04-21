@@ -2,23 +2,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:test_honours/model/ApiBusinessLogic.dart';
-import 'package:test_honours/model/our_doctors.dart';
+import 'package:test_honours/model/CalendarBusinessLogic.dart';
+import 'package:test_honours/local_storage/our_doctors.dart';
 
-import '../core/booking_calendar.dart';
-import '../components/booking_calendar/booking_service.dart';
-import '../model/enums.dart';
+import 'package:test_honours/core/booking_calendar.dart';
+import 'package:test_honours/components/booking_calendar/booking_service.dart';
+import 'package:test_honours/model/enums.dart';
 
-class BookingCalendarDemoApp extends StatefulWidget {
+class BookingCalendarApp extends StatefulWidget {
   final int activeIndex;
-  const BookingCalendarDemoApp({Key? key, required this.activeIndex})
+  const BookingCalendarApp({Key? key, required this.activeIndex})
       : super(key: key);
 
   @override
-  State<BookingCalendarDemoApp> createState() => _BookingCalendarDemoAppState();
+  State<BookingCalendarApp> createState() => _BookingCalendarAppState();
 }
 
-class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
+class _BookingCalendarAppState extends State<BookingCalendarApp> {
   final currentUser = FirebaseAuth.instance;
 
   final now = DateTime.now();

@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:test_honours/assets/booking_confirmation_box.dart';
+import 'package:test_honours/view/assets/booking_confirmation_box.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-import '../../assets/missing_fields_box.dart';
+import 'package:test_honours/view/assets/missing_fields_box.dart';
 
 class AppointmentDetails extends StatefulWidget {
   @override
@@ -162,20 +162,9 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                         .collection('appointment_details')
                         .add(apptDetailsData);
 
-                    // int len = 0;
-                    // if (descriptionController.text.isNotEmpty &&
-                    //     phoneNumberController.text.isNotEmpty) {
                     Navigator.of(context).pop(true);
 
-                    ///! not this
-                    // Navigator.of(context).push(MaterialPageRoute(
-                    //     builder: (context) => BookingConfirmation()));
-                    // }
-                    // if (descriptionController.text.length != len ||
-                    //     userPhoneNumber.isEmpty) {
-                    //   Navigator.of(context).push(MaterialPageRoute(
-                    //       builder: (context) => MissingFieldsSnackBar()));
-                    // }
+
                   },
                   style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(

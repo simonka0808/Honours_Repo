@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:test_honours/widgets/bmi_result_page.dart';
+import '../widgets/bmi_result_page.dart';
 
-import '../components/bmi_calculator/bmi_calculation.dart';
+import 'package:test_honours/controller/bmi_calculator/BmiController.dart';
 
 class BMICalculator extends StatefulWidget {
   @override

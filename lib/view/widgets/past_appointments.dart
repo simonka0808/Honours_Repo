@@ -3,30 +3,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:test_honours/widgets/past_appointments.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../assets/cancel_appt_box.dart';
-import '../model/our_doctors.dart';
+import 'package:test_honours/local_storage/our_doctors.dart';
 
-class AppointmentsList extends StatefulWidget {
+class PastAppointments extends StatefulWidget {
   @override
-  _AppointmentsListState createState() => _AppointmentsListState();
+  _PastAppointmentsState createState() => _PastAppointmentsState();
 }
 
-class _AppointmentsListState extends State<AppointmentsList> {
+class _PastAppointmentsState extends State<PastAppointments> {
   final currentUser = FirebaseAuth.instance;
-
-  Future<void> deleteAppt(String apptId) async {
-    final collection = FirebaseFirestore.instance.collection('client_bookings');
-    try {
-      await collection.doc(apptId).delete();
-      print('Deleted');
-    } catch (error) {
-      print('Delete failed: $error');
-    }
-  }
 
   static Future<void> opentApptMap() async {
     for (var i = 0; i < doctorsList.length; i++) {
@@ -44,14 +33,8 @@ class _AppointmentsListState extends State<AppointmentsList> {
       }
     }
 
-    deleteAppt(id) async {
-      await FirebaseFirestore.instance.collection('client_bookings').doc(id).delete();
     // double latitude = 57.152944651282304;
     // double longitude = -2.102075401560233;
-  }
-
-
-
   }
 
   @override
@@ -63,25 +46,17 @@ class _AppointmentsListState extends State<AppointmentsList> {
         new DateTime(now.year, now.month, now.day, now.hour, now.minute);
     return Scaffold(
         appBar: AppBar(
-          title: Text("Upcoming appointments"),
+          title: Text("Past appointments"),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
         body: Center(
             child: SingleChildScrollView(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-              ElevatedButton(
-                child: const Text("Past Appointments"),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => PastAppointments()));
-                },
-                style: ElevatedButton.styleFrom(
-                    shape: StadiumBorder(),
-                    textStyle: TextStyle(
-                      fontSize: 15,
-                    )),
-              ),
               SizedBox(height: 20),
               StreamBuilder(
                   stream: FirebaseFirestore.instance
@@ -105,7 +80,7 @@ class _AppointmentsListState extends State<AppointmentsList> {
                             DateTime bookingStartConverted =
                                 DateTime.parse(bookingStart);
 
-                            if (bookingStartConverted.isAfter(today)) {
+                            if (bookingStartConverted.isBefore(today)) {
                               return Container(
                                 height: height,
                                 width: width,
@@ -177,74 +152,6 @@ class _AppointmentsListState extends State<AppointmentsList> {
                                           )
                                         ],
                                       ),
-                                      Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 5.0),
-                                          child: Row(
-                                            children: <Widget>[
-                                              Expanded(
-                                                child: SizedBox(
-                                                  // width: 80,
-                                                  height: 30,
-                                                  child: ElevatedButton(
-                                                    child: const Text("Cancel"),
-                                                    onPressed: () {
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                          AlertDialog(
-                                                            title: const Text('Are you sure you want to cancel the appointment?'),
-                                                            actions: <Widget>[
-                                                              TextButton(
-                                                                onPressed: () {
-                                                                  Navigator.pop(context, 'Yes');
-                                                                  deleteAppt(snapshot.data!.docs[i].id);
-                                                                },
-                                                                child: const Text('Yes',
-                                                                    style: TextStyle(fontWeight: FontWeight.bold)),
-                                                              ),
-                                                              TextButton(
-                                                                onPressed: () => Navigator.pop(context, 'Go back'),
-                                                                child: const Text('Go back'),
-                                                              ),
-                                                            ],
-                                                          )));
-                                                    },
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            shape:
-                                                                StadiumBorder(),
-                                                            textStyle:
-                                                                TextStyle(
-                                                              fontSize: 15,
-                                                            )),
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 8)),
-                                              Expanded(
-                                                child: SizedBox(
-                                                  // width: 80,
-                                                  height: 30,
-                                                  child: ElevatedButton(
-                                                    child: const Text(
-                                                        "Reschedule"),
-                                                    onPressed: () {},
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            shape:
-                                                                StadiumBorder(),
-                                                            textStyle:
-                                                                TextStyle(
-                                                              fontSize: 15,
-                                                            )),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ))
                                     ])),
                               );
                             } else {

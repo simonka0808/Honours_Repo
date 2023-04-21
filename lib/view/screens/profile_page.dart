@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:test_honours/db/auth_controller.dart';
-import 'package:test_honours/screens/bmi_input_page.dart';
+import 'package:test_honours/controller/auth/auth_controller.dart';
+import '../screens/bmi_input_page.dart';
 
 class ProfilePage extends StatelessWidget {
   String email;

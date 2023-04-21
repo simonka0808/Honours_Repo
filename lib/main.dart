@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:test_honours/components/appointment/single_user_booked_provider.dart';
-import 'package:test_honours/db/auth_controller.dart';
-import 'screens/login_page.dart';
+import 'package:test_honours/controller/auth/auth_controller.dart';
+import 'package:test_honours/view/screens/login_page.dart';
 import 'dart:core';
 
 Future<void> main() async {
@@ -17,7 +17,6 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // final String email;
 
   const MyApp({key});
 
@@ -29,19 +28,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserBooksProvider()),
       ],
       child: GetMaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            // This is the theme of your application.
-            //
-            // Try running your application with "flutter run". You'll see the
-            // application has a blue toolbar. Then, without quitting the app, try
-            // changing the primarySwatch below to Colors.green and then invoke
-            // "hot reload" (press "r" in the console where you ran "flutter run",
-            // or simply save your changes to "hot reload" in a Flutter IDE).
-            // Notice that the counter didn't reset back to zero; the application
-            // is not restarted.
-            primarySwatch: Colors.blue,
-          ),
+          title: 'Honours Project',
+          theme: ThemeData(primarySwatch: Colors.blue,),
           home: new LoginPage()),
     );
   }
